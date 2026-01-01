@@ -1,2 +1,2 @@
 # tellurislabs.io
-Geospatial software development
+Official Telluris Labs website
