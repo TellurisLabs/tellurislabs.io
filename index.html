@@ -5,23 +5,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Telluris Labs</title>
-  <meta name="description" content="Open-source geospatial software and data projects by Telluris Labs.">
+  <meta name="description" content="Geospatial software and data projects by Telluris Labs.">
   <link rel="canonical" href="https://tellurislabs.io/">
 
   <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=MuseoModerno:wght@700&family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
 
   <style>
     body {
       margin: 0;
       padding: 0;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 300;
       line-height: 1.6;
+      color: #222;
       background-color: #f9f9f9;
     }
 
     header {
       background-color: #11925c;
-      color: #fff;
+      color: #ffffff;
       padding: 1rem 2rem;
       text-align: center;
     }
@@ -39,6 +44,7 @@
       font-weight: 500;
       font-size: 1.2rem;
       margin-top: 0.5rem;
+      margin-bottom: 0;
     }
 
     main {
@@ -50,6 +56,11 @@
       color: #222;
     }
 
+    .intro {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+
     h2 {
       font-family: 'Roboto', sans-serif;
       font-weight: 700;
@@ -59,7 +70,7 @@
     a {
       font-family: 'Roboto', sans-serif;
       font-weight: 300;
-      color: #0e7e50;
+      color: #11925c;
       text-decoration: none;
     }
 
@@ -67,14 +78,27 @@
       text-decoration: underline;
     }
 
+    ul li p {
+      margin: 0.3rem 0;
+    }
+
+    ul li {
+      margin-bottom: 1.2rem;
+    }
+
     footer {
       font-family: 'Roboto', sans-serif;
       font-weight: 300;
+      font-size: 0.9rem;
+      color: #555;
       background-color: #eee;
       text-align: center;
       padding: 1rem;
       margin-top: 2rem;
-      font-size: 0.9rem;
+    }
+
+    footer div {
+      margin: 0.2rem 0;
     }
 
     .contact-list {
@@ -95,25 +119,65 @@
   </header>
   
   <main>
-    <h2>Projects</h2>
-    <p>These projects are currently under development. All packages are available for public use under their respective licenses and can be cloned or downloaded from the GitHub site below.</p>
-    <ul>
-      <li>atmoflux: climate data analysis</li>
-      <li>spatialis: geospatial data processing and analysis</li>
-      <li>spectralis: remote sensing and earth observation</li>
-      <li>thermadex: human thermal comfort indices</li>
-    </ul>
+    <p class="intro">
+      Telluris Labs develops open-source Python tools for geospatial analysis, remote sensing,
+      and atmospheric and surface–energy flux research, with an emphasis on scientific
+      rigor, reproducibility, and applied environmental workflows.
+    </p>
+    
+    <section>
+      <h2>Projects</h2>
+      <ul>
+        <li>
+          <strong>atmoflux</strong> 
+          <p>
+            Python utilities for working with atmospheric variables, 
+            surface energy balance components, and flux-related calculations. 
+          </p>
+          <p>
+            <a href="https://github.com/tellurislabs/atmoflux" target="_blank" rel="noopener noreferrer">
+              atmoflux on GitHub
+            </a>
+          </p>
+        </li>
 
-    <h2>Contact</h2>
-    <ul class="contact-list">
-      <li>Email: <a href="mailto:info@tellurislabs.io">info@tellurislabs.io</a></li>
-      <li>GitHub: <a href="https://github.com/TellurisLabs" target="_blank">github.com/TellurisLabs</a></li>
-    </ul>
+        <li>
+          <strong>thermadex</strong>
+          <p>
+            Python utilities for thermal indices, with a focus on 
+            outdoor human thermal comfort and heat stress assessment.
+          </p>
+          <p>
+            <a href="https://github.com/tellurislabs/thermadex" target="_blank" rel="noopener noreferrer">
+              thermadex on GitHub
+            </a>
+          </p>        
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <ul class="contact-list">
+        <li>
+          GitHub:
+          <a href="https://github.com/tellurislabs" target="_blank" rel="noopener noreferrer">
+            github.com/tellurislabs
+          </a>
+        </li>
+        <li>
+          Email:
+          <a href="mailto:info&#64;tellurislabs&#46;io">
+            info&#64;tellurislabs&#46;io
+          </a>
+        </li>
+      </ul>
+    </section>
   </main>
 
   <footer>
-    &copy; 2026 Telluris Labs
+    <div>&copy; 2026 Telluris Labs</div>
+    <div>Hosted on GitHub Pages</div>
   </footer>
 </body>
-  
 </html>
