@@ -22,42 +22,43 @@
       line-height: 1.6;
       color: #222;
       background-color: #f9f9f9;
+      }
+  
+    header {
+      display: flex;
+      align-items: center;      /* vertically center logo and text */
+      justify-content: center;  /* center entire header content horizontally */
+      background-color: #11925c;
+      color: #ffffff;
+      padding: 1rem 2rem;
     }
-
-header {
-  display: flex;
-  align-items: center;   /* vertically center logo with text */
-  background-color: #11925c;
-  color: #ffffff;
-  padding: 1rem 2rem;
-}
-
-header img.logo {
-  height: 60px;          /* adjust as needed for your design */
-  margin-right: 1rem;    /* space between logo and text */
-}
-
-header .header-text {
-  display: flex;
-  flex-direction: column; /* stack name and tagline */
-  justify-content: center;
-  text-align: left;
-}
-
-header h1 {
-  font-family: 'MuseoModerno', sans-serif;
-  font-weight: 700;
-  font-size: 2.5rem;
-  letter-spacing: 0.05em;
-  margin: 0;              /* remove default margin */
-}
-
-header p {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 500;
-  font-size: 1.2rem;
-  margin: 0.2rem 0 0 0;   /* small spacing above tagline, no bottom margin */
-}
+    
+    header img.logo {
+      height: 60px;             /* adjust as needed */
+      margin-right: 1rem;       /* space between logo and text */
+    }
+    
+    header .header-text {
+      display: flex;
+      flex-direction: column;   /* stack name and tagline */
+      justify-content: center;
+      text-align: left;         /* text aligned to left, against logo */
+    }
+    
+    header h1 {
+      font-family: 'MuseoModerno', sans-serif;
+      font-weight: 700;
+      font-size: 2.5rem;
+      letter-spacing: 0.05em;
+      margin: 0;                /* remove default margins */
+    }
+    
+    header p {
+      font-family: 'Roboto', sans-serif;
+      font-weight: 500;
+      font-size: 1.2rem;
+      margin: 0.2rem 0 0 0;     /* small space between name and tagline */
+    }
 
     main {
       padding: 2rem;
