@@ -59,7 +59,7 @@
       font-weight: 500;
       font-size: 1.2rem;
       margin: 0;
-      line-height: 1.1;
+      line-height: 1.05;
     }
 
     main {
@@ -124,12 +124,27 @@
     .contact-list li {
       margin-bottom: 0.5rem;
     }
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2rem;
+        letter-spacing: 0.03em;
+      }
+    
+      header p {
+        font-size: 1rem;
+        margin-top: 0;
+      }
+    
+      .header-text {
+        line-height: 1.05;
+      }
+    }
   </style>
 </head>
 
 <body>
 <header>
-  <img src="logo_nofill.svg" alt="Telluris Labs Logo" class="logo">
+  <img src="full_color.svg" alt="Telluris Labs Logo" class="logo">
   <div class="header-text">
     <h1>Telluris Labs</h1>
     <p>Geospatial Software and Data Solutions</p>
