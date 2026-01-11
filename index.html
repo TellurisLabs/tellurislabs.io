@@ -26,23 +26,23 @@
   
     header {
       display: flex;
-      align-items: center;      /* vertically center logo and text */
-      justify-content: center;  /* center entire header content horizontally */
+      align-items: center;      
+      justify-content: center;  
       background-color: #11925c;
       color: #ffffff;
       padding: 1rem 2rem;
     }
     
     header img.logo {
-      height: 60px;             /* adjust as needed */
-      margin-right: 1rem;       /* space between logo and text */
+      height: 72px;           
+      margin-right: 1rem;      
     }
     
     header .header-text {
       display: flex;
-      flex-direction: column;   /* stack name and tagline */
+      flex-direction: column;  
       justify-content: center;
-      text-align: left;         /* text aligned to left, against logo */
+      text-align: left;      
     }
     
     header h1 {
@@ -50,14 +50,16 @@
       font-weight: 700;
       font-size: 2.5rem;
       letter-spacing: 0.05em;
-      margin: 0;                /* remove default margins */
+      margin: 0;      
+      line-height: 1.05;
     }
     
     header p {
       font-family: 'Roboto', sans-serif;
       font-weight: 500;
       font-size: 1.2rem;
-      margin: 0.2rem 0 0 0;     /* small space between name and tagline */
+      margin: 0;
+      line-height: 1.1;
     }
 
     main {
@@ -127,7 +129,7 @@
 
 <body>
 <header>
-  <img src="logo_nofill.png" alt="Telluris Labs Logo" class="logo">
+  <img src="logo_nofill.svg" alt="Telluris Labs Logo" class="logo">
   <div class="header-text">
     <h1>Telluris Labs</h1>
     <p>Geospatial Software and Data Solutions</p>
