@@ -24,28 +24,40 @@
       background-color: #f9f9f9;
     }
 
-    header {
-      background-color: #11925c;
-      color: #ffffff;
-      padding: 1rem 2rem;
-      text-align: center;
-    }
+header {
+  display: flex;
+  align-items: center;   /* vertically center logo with text */
+  background-color: #11925c;
+  color: #ffffff;
+  padding: 1rem 2rem;
+}
 
-    header h1 {
-      font-family: 'MuseoModerno', sans-serif;
-      font-weight: 700;
-      font-size: 2.5rem;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.2rem;
-    }
+header img.logo {
+  height: 60px;          /* adjust as needed for your design */
+  margin-right: 1rem;    /* space between logo and text */
+}
 
-    header p {
-      font-family: 'Roboto', sans-serif;
-      font-weight: 500;
-      font-size: 1.2rem;
-      margin-top: 0.5rem;
-      margin-bottom: 0;
-    }
+header .header-text {
+  display: flex;
+  flex-direction: column; /* stack name and tagline */
+  justify-content: center;
+  text-align: left;
+}
+
+header h1 {
+  font-family: 'MuseoModerno', sans-serif;
+  font-weight: 700;
+  font-size: 2.5rem;
+  letter-spacing: 0.05em;
+  margin: 0;              /* remove default margin */
+}
+
+header p {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 1.2rem;
+  margin: 0.2rem 0 0 0;   /* small spacing above tagline, no bottom margin */
+}
 
     main {
       padding: 2rem;
@@ -113,10 +125,13 @@
 </head>
 
 <body>
-  <header>
+<header>
+  <img src="logo_nofill.png" alt="Telluris Labs Logo" class="logo">
+  <div class="header-text">
     <h1>Telluris Labs</h1>
     <p>Geospatial Software and Data Solutions</p>
-  </header>
+  </div>
+</header>
   
   <main>
     <p class="intro">
