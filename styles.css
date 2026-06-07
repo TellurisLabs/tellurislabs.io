@@ -549,25 +549,24 @@ footer.site div { margin: 0.2rem 0; }
 }
 .equation .katex-display { margin: 0.2rem 0; text-align: left; }
 
-/* Mobile collapsible left rail */
-.rail-toggle {
+/* Sections-menu toggle in the top nav (mobile, documentation pages only) */
+.rail-toggle-nav {
   display: none;
   align-items: center;
-  gap: 0.4rem;
-  font-family: var(--font-body);
-  font-size: 0.92rem;
-  font-weight: 500;
+  background: none;
+  border: none;
   color: var(--text);
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0.45rem 1rem;
   cursor: pointer;
-  transition: border-color 0.2s ease;
+  padding: 0.3rem 0.45rem;
+  line-height: 1;
 }
-.rail-toggle:hover { border-color: var(--accent); }
-.rail-toggle .caret { transition: transform 0.2s ease; font-size: 0.9rem; }
-aside.sidebar.rail-open .rail-toggle .caret { transform: rotate(180deg); }
+.rail-toggle-nav:hover { color: var(--accent); }
+.rail-toggle-nav .caret {
+  display: inline-block;
+  font-size: 0.85rem;
+  transition: transform 0.2s ease;
+}
+.rail-toggle-nav[aria-expanded="true"] .caret { transform: rotate(180deg); }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1080px) {
@@ -581,12 +580,12 @@ aside.sidebar.rail-open .rail-toggle .caret { transform: rotate(180deg); }
     height: auto;
     overflow: visible;
     border-right: none;
-    border-bottom: 1px solid var(--border);
-    padding: 0.7rem 0;
+    padding: 0;
   }
-  .rail-toggle { display: inline-flex; }
+  .rail-toggle-nav { display: inline-flex; }
   .rail-body { display: none; }
-  aside.sidebar.rail-open .rail-body { display: block; padding-top: 0.7rem; }
+  aside.sidebar.rail-open { border-bottom: 1px solid var(--border); padding: 0.7rem 0; }
+  aside.sidebar.rail-open .rail-body { display: block; }
   header.site h1 { font-size: 2rem; letter-spacing: 0.03em; }
   header.site p { font-size: 1rem; margin-top: 0; }
   main { padding-top: 1.5rem; }

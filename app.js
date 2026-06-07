@@ -81,10 +81,10 @@
     });
   }
 
-  /* ---------- Mobile collapsible left rail ---------- */
+  /* ---------- Mobile sections menu (toggle lives in the top nav) ---------- */
   var railToggle = document.getElementById("railToggle");
-  if (railToggle) {
-    var railSidebar = railToggle.closest("aside.sidebar");
+  var railSidebar = document.querySelector("aside.sidebar");
+  if (railToggle && railSidebar) {
     railToggle.addEventListener("click", function () {
       var open = railSidebar.classList.toggle("rail-open");
       railToggle.setAttribute("aria-expanded", open ? "true" : "false");

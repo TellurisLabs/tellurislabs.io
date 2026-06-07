@@ -42,6 +42,10 @@
       <div class="topnav-links">
         <a href="index.html">Home</a>
         <a href="atmoflux.html">Atmoflux</a>
+        <button class="rail-toggle-nav" id="railToggle" type="button"
+                aria-expanded="false" aria-controls="railBody" aria-label="Toggle sections menu">
+          <span class="caret" aria-hidden="true">▾</span>
+        </button>
       </div>
       <span class="spacer"></span>
       <span class="version-pill" title="Documented package version">v1.1.0</span>
@@ -61,9 +65,6 @@
 
     <div class="layout">
       <aside class="sidebar">
-        <button class="rail-toggle" id="railToggle" type="button" aria-expanded="false" aria-controls="railBody">
-          <span>Menu</span><span class="caret" aria-hidden="true">▾</span>
-        </button>
         <div class="rail-body" id="railBody">
           <div class="filter-wrap">
             <input id="navFilter" class="filter-input" type="text"
