@@ -29,72 +29,78 @@
 </head>
 
 <body>
-  <div class="page simple">
-    <header class="site">
-      <a href="index.html" aria-label="Telluris Labs home" style="display:flex;align-items:center;">
-        <img src="full_color.svg" alt="Telluris Labs Logo" class="logo" onerror="this.style.display='none'">
-      </a>
-      <div class="header-text">
-        <h1><a href="index.html">Telluris Labs</a></h1>
-        <p>Geospatial Software and Data Solutions</p>
-      </div>
-    </header>
+<header>
+  <img src="full_color.svg" alt="Telluris Labs Logo" class="logo">
+  <div class="header-text">
+    <h1>Telluris Labs</h1>
+    <p>Geospatial Software and Data Solutions</p>
+  </div>
+</header>
+  
+  <main>
+    <p class="intro">
+      Telluris Labs develops open-source Python tools for geospatial analysis, remote sensing,
+      and atmospheric and surface–energy flux research, with an emphasis on scientific
+      rigor, reproducibility, and applied environmental workflows.
+    </p>
+    
+    <section>
+      <h2>Projects</h2>
+      <ul>
+        <li>
+          <strong>atmoflux</strong> 
+          <p> 
+            Python utilities for working with atmospheric variables, 
+            surface energy balance components, and flux-related calculations. 
+          </p>
+          <p>
+            <a href="https://pypi.org/project/atmoflux/" target="_blank" rel="noopener noreferrer">
+              atmoflux on PyPI
+            </a>
+            <strong> · </strong>
+            <a href="https://github.com/Telluris-Labs/atmoflux" target="_blank" rel="noopener noreferrer">
+              atmoflux on GitHub
+            </a>
+          </p>
+        </li>
 
-    <nav class="subnav" aria-label="Site navigation and tools">
-      <div class="topnav-links">
-        <a href="index.html">Home</a>
-        <a href="atmoflux.html">Atmoflux</a>
-      </div>
-      <span class="spacer"></span>
-      <button id="themeToggle" class="theme-toggle" type="button"
-              aria-label="Toggle dark mode" title="Toggle light / dark theme">
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="4"></circle>
-          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
-        </svg>
-      </button>
-    </nav>
+        <li>
+          <strong>thermadex</strong>
+          <p>
+            Python utilities for thermal indices, with a focus on 
+            outdoor human thermal comfort and heat stress assessment.
+          </p>
+          <p>
+            <a href="https://pypi.org/project/thermadex/" target="_blank" rel="noopener noreferrer">
+              thermadex on PyPI
+            </a>
+            <strong> · </strong>
+            <a href="https://github.com/Telluris-Labs/thermadex" target="_blank" rel="noopener noreferrer">
+              thermadex on GitHub
+            </a>
+          </p>        
+        </li>
+      </ul>
+    </section>
 
-    <main>
-      <p class="intro">
-        Telluris Labs develops software and solutions for geospatial data analysis, management,
-        and automation.
-      </p>
-
-      <p>
-        Our solutions range from focused tools to end-to-end data processing and analysis, using an
-        approach that emphasizes scientific rigor, reproducible methods, and reliable results.
-        Comprehensive documentation and testing are integral to our development process.
-      </p>
-
-      <p>
-        As part of our commitment to open science, we develop and maintain open-source Python
-        packages, with a focus on scientific research and environmental analysis applications.
-        Current packages include <strong><a href="atmoflux.html">atmoflux</a></strong> for
-        atmospheric and surface energy-flux calculations and
-        <strong><a href="thermadex.html">thermadex</a></strong> (in development) for
-        thermal-comfort and heat-stress analysis.
-      </p>
-
-      <section id="contact">
-        <h2>Contact</h2>
-        <ul class="contact-list">
-          <li>
-            GitHub:
-            <a href="https://github.com/Telluris-Labs" target="_blank" rel="noopener noreferrer">github.com/Telluris-Labs</a>
-          </li>
-          <li>
-            Email:
-            <a href="mailto:info&#64;tellurislabs&#46;io">info&#64;tellurislabs&#46;io</a>
-          </li>
-        </ul>
-      </section>
-    </main>
+    <section>
+      <h2>Contact</h2>
+      <ul class="contact-list">
+        <li>
+          GitHub:
+          <a href="https://github.com/tellurislabs" target="_blank" rel="noopener noreferrer">
+            github.com/Telluris-Labs
+          </a>
+        </li>
+        <li>
+          Email:
+          <a href="mailto:info&#64;tellurislabs&#46;io">
+            info&#64;tellurislabs&#46;io
+          </a>
+        </li>
+      </ul>
+    </section>
+  </main>
 
     <footer class="site">
       <div>&copy; 2026 Telluris Labs</div>
