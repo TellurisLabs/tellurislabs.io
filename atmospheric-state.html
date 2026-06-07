@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atmospheric state — Atmoflux — Telluris Labs</title>
+  <meta name="description" content="The measured and derived state of the near-surface atmosphere and its vertical structure.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=MuseoModerno:wght@700&family=Roboto:wght@300;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+
+  <script>
+    (function () {
+      try {
+        var s = localStorage.getItem("telluris-theme");
+        var d = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", s || (d ? "dark" : "light"));
+      } catch (e) {
+        var d2 = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", d2 ? "dark" : "light");
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="page">
+    <header class="site">
+      <a href="index.html" aria-label="Telluris Labs home" style="display:flex;align-items:center;">
+        <img src="full_color.svg" alt="Telluris Labs Logo" class="logo" onerror="this.style.display='none'">
+      </a>
+      <div class="header-text">
+        <h1><a href="index.html">Telluris Labs</a></h1>
+        <p>Geospatial Software and Data Solutions</p>
+      </div>
+    </header>
+    <nav class="subnav" aria-label="Site navigation and tools">
+      <div class="topnav-links">
+        <a href="index.html">Home</a>
+        <a href="atmoflux.html">Atmoflux</a>
+      </div>
+      <span class="spacer"></span>
+      <span class="version-pill" title="Documented package version">v1.1.0</span>
+      <button id="themeToggle" class="theme-toggle" type="button"
+              aria-label="Toggle dark mode" title="Toggle light / dark theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+        </svg>
+      </button>
+    </nav>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <button class="rail-toggle" id="railToggle" type="button" aria-expanded="false" aria-controls="railBody">
+          <span>Menu</span><span class="caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="rail-body" id="railBody">
+          <div class="filter-wrap">
+            <input id="navFilter" class="filter-input" type="text"
+                   placeholder="Filter sections…" aria-label="Filter guide sections"
+                   autocomplete="off" spellcheck="false">
+          </div>
+        <nav class="toc-nav" id="sidebarNav" aria-label="atmoflux sections">
+          <div class="nav-group">
+            <span class="group-label">Getting started</span>
+            <a href="atmoflux.html#overview">Overview</a>
+            <a href="atmoflux.html#conventions">Conventions &amp; units</a>
+            <a href="atmoflux.html#citation">Citation</a>
+            <a href="atmoflux.html#installation">Installation</a>
+            <a href="atmoflux.html#quickstart">Quick start</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Atmospheric state</span>
+            <a href="atmospheric-state.html#temperature">Temperature</a>
+            <a href="atmospheric-state.html#humidity">Humidity &amp; moisture</a>
+            <a href="atmospheric-state.html#wind">Wind</a>
+            <a href="atmospheric-state.html#atmosphere">Standard atmosphere</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Radiation</span>
+            <a href="radiation.html#solar">Solar geometry</a>
+            <a href="radiation.html#radiative">Radiative fluxes</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Surface fluxes &amp; energy balance</span>
+            <a href="surface-fluxes.html#turbulent">Turbulent fluxes</a>
+            <a href="surface-fluxes.html#stability">Surface-layer stability</a>
+            <a href="surface-fluxes.html#hydro">Evaporation &amp; hydrology</a>
+            <a href="surface-fluxes.html#aerosols">Aerosols</a>
+            <a href="surface-fluxes.html#balance">Energy balance</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Core &amp; utilities</span>
+            <a href="core-utilities.html#core">Core data structures</a>
+            <a href="core-utilities.html#constants">Constants</a>
+            <a href="core-utilities.html#exceptions">Exceptions</a>
+          </div>
+        </nav>
+          <div class="filter-empty" id="filterEmpty">No matching sections.</div>
+        </div>
+      </aside>
+
+      <main>
+        <h1 class="page-title">Atmospheric state</h1>
+        <p class="lede">The measured and derived state of the near-surface atmosphere and its vertical structure.</p>
+      <section id="temperature" class="module-section">
+        <h2><code>temperature</code> &mdash; Temperature<a class="anchor" href="#temperature" aria-hidden="true">#</a></h2>
+        <p>Unit conversion and temperature-derived quantities — dew point, potential and virtual temperature, lapse rates, wet-bulb temperature, and skin temperature from longwave.</p>
+        <section id="convert_temperature" class="fn-detail">
+          <h3><code>convert_temperature</code></h3>
+          <span class="signature">convert_temperature(temp: &#x27;float&#x27;, input_unit: &#x27;str&#x27;, output_unit: &#x27;str&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Convert temperature between Celsius, Fahrenheit, and Kelvin.</p>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.temperature import convert_temperature
+<span class="prompt">&gt;&gt;&gt; </span>convert_temperature(100, &quot;C&quot;, &quot;F&quot;)
+<span class="out">212.0</span>
+<span class="prompt">&gt;&gt;&gt; </span>convert_temperature(273.15, &quot;K&quot;, &quot;C&quot;)
+<span class="out">0.0</span>
+<span class="prompt">&gt;&gt;&gt; </span>a, b, c = 80, &quot;F&quot;, &quot;C&quot;
+<span class="prompt">&gt;&gt;&gt; </span>temp = convert_temperature(a, b, c)
+<span class="prompt">&gt;&gt;&gt; </span>f&quot;{a}°{b} is equal to {round(temp, 2)}°{c}.&quot;
+<span class="out">80°F is equal to 26.67°C.</span></code></pre></div>
+        </section>
+        <section id="dewpoint_temperature" class="fn-detail">
+          <h3><code>dewpoint_temperature</code></h3>
+          <span class="signature">dewpoint_temperature(temp: &#x27;float&#x27;, rh: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Calculate dew point temperature from temperature and relative humidity.</p>
+          <div class="equation"><span class="eqn-name">Magnus–Tetens approximation</span><span class="katex-eq" data-tex="T_d=\dfrac{b\,\alpha}{a-\alpha},\quad \alpha=\ln\!\dfrac{RH}{100}+\dfrac{aT}{b+T}\quad(a=17.27,\ b=237.3)">T_d=\dfrac{b\,\alpha}{a-\alpha},\quad \alpha=\ln\!\dfrac{RH}{100}+\dfrac{aT}{b+T}\quad(a=17.27,\ b=237.3)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.temperature import dewpoint_temperature
+<span class="prompt">&gt;&gt;&gt; </span>round(dewpoint_temperature(30, 50), 2)
+<span class="out">18.44</span>
+<span class="prompt">&gt;&gt;&gt; </span>round(dewpoint_temperature(86, 50, unit=&quot;F&quot;), 2)
+<span class="out">65.19</span></code></pre></div>
+        </section>
+        <section id="dewpoint_from_avp" class="fn-detail">
+          <h3><code>dewpoint_from_avp</code></h3>
+          <span class="signature">dewpoint_from_avp(avp: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Calculate dew point temperature from actual vapor pressure.</p>
+          <div class="equation"><span class="eqn-name">Inverse Magnus form</span><span class="katex-eq" data-tex="T_d=\dfrac{237.3\,\alpha}{17.27-\alpha},\quad \alpha=\ln\!\dfrac{e}{0.6108}">T_d=\dfrac{237.3\,\alpha}{17.27-\alpha},\quad \alpha=\ln\!\dfrac{e}{0.6108}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.temperature import dewpoint_from_avp
+<span class="prompt">&gt;&gt;&gt; </span>round(dewpoint_from_avp(2.338), 2)
+<span class="out">20.0</span></code></pre></div>
+        </section>
+        <section id="potential_temperature" class="fn-detail">
+          <h3><code>potential_temperature</code></h3>
+          <span class="signature">potential_temperature(temp: &#x27;float&#x27;, pressure: &#x27;float&#x27;, reference_pressure: &#x27;float&#x27; = 101.325, unit: &#x27;str&#x27; = &#x27;K&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Calculate potential temperature of dry air.</p>
+          <div class="equation"><span class="eqn-name">Poisson&#x27;s equation</span><span class="katex-eq" data-tex="\theta=T\left(\dfrac{P_0}{P}\right)^{R_d/c_p}">\theta=T\left(\dfrac{P_0}{P}\right)^{R_d/c_p}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.temperature import potential_temperature
+<span class="prompt">&gt;&gt;&gt; </span>round(potential_temperature(273.15, 80.0), 2)
+<span class="out">292.22</span>
+<span class="prompt">&gt;&gt;&gt; </span>round(potential_temperature(0.0, 80.0, unit=&quot;C&quot;), 2)
+<span class="out">19.07</span></code></pre></div>
+        </section>
+        <section id="virtual_temperature" class="fn-detail">
+          <h3><code>virtual_temperature</code></h3>
+          <span class="signature">virtual_temperature(temp: &#x27;float&#x27;, mixing_ratio: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;K&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Calculate virtual temperature of moist air.</p>
+          <div class="equation"><span class="eqn-name">Virtual temperature</span><span class="katex-eq" data-tex="T_v=T\,(1+0.61\,w)">T_v=T\,(1+0.61\,w)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.temperature import virtual_temperature
+<span class="prompt">&gt;&gt;&gt; </span>round(virtual_temperature(300.0, 0.01), 3)
+<span class="out">301.83</span></code></pre></div>
+        </section>
+        <section id="lapse_rate" class="fn-detail">
+          <h3><code>lapse_rate</code></h3>
+          <span class="signature">lapse_rate(temp_lower: &#x27;float&#x27;, temp_upper: &#x27;float&#x27;, height_lower: &#x27;float&#x27;, height_upper: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Calculate the environmental lapse rate between two heights.</p>
+          <div class="equation"><span class="eqn-name">Environmental lapse rate</span><span class="katex-eq" data-tex="\Gamma=-\dfrac{T_\mathrm{upper}-T_\mathrm{lower}}{z_\mathrm{upper}-z_\mathrm{lower}}">\Gamma=-\dfrac{T_\mathrm{upper}-T_\mathrm{lower}}{z_\mathrm{upper}-z_\mathrm{lower}}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.temperature import lapse_rate
+<span class="prompt">&gt;&gt;&gt; </span>round(lapse_rate(15.0, 8.5, 0.0, 1000.0) * 1000, 1)
+<span class="out">6.5</span></code></pre></div>
+        </section>
+        <section id="surface_temperature_from_lw" class="fn-detail">
+          <h3><code>surface_temperature_from_lw</code></h3>
+          <span class="signature">surface_temperature_from_lw(lw_up: &#x27;float&#x27;, emissivity: &#x27;float&#x27; = 1.0, unit: &#x27;str&#x27; = &#x27;K&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Retrieve surface temperature from upwelling longwave radiation.</p>
+          <div class="equation"><span class="eqn-name">Inverse Stefan–Boltzmann law</span><span class="katex-eq" data-tex="T_s=\left(\dfrac{L_\uparrow}{\varepsilon\,\sigma}\right)^{1/4}">T_s=\left(\dfrac{L_\uparrow}{\varepsilon\,\sigma}\right)^{1/4}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.temperature import surface_temperature_from_lw
+<span class="prompt">&gt;&gt;&gt; </span>round(surface_temperature_from_lw(390.0), 2)
+<span class="out">287.98</span>
+<span class="prompt">&gt;&gt;&gt; </span>round(surface_temperature_from_lw(390.0, unit=&quot;C&quot;), 2)
+<span class="out">14.83</span></code></pre></div>
+        </section>
+        <section id="wet_bulb_temperature" class="fn-detail">
+          <h3><code>wet_bulb_temperature</code></h3>
+          <span class="signature">wet_bulb_temperature(temp: &#x27;float&#x27;, rh: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Wet-bulb temperature using Stull&#x27;s empirical approximation.</p>
+          <div class="equation"><span class="eqn-name">Stull (2011)</span><span class="katex-eq" data-tex="\begin{aligned}T_w=\;&amp;T\arctan\!\big(0.151977\sqrt{RH+8.313659}\big)+\arctan(T+RH)\\&amp;-\arctan(RH-1.676331)+0.00391838\,RH^{1.5}\arctan(0.023101\,RH)\\&amp;-4.686035\end{aligned}">\begin{aligned}T_w=\;&amp;T\arctan\!\big(0.151977\sqrt{RH+8.313659}\big)+\arctan(T+RH)\\&amp;-\arctan(RH-1.676331)+0.00391838\,RH^{1.5}\arctan(0.023101\,RH)\\&amp;-4.686035\end{aligned}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.temperature import wet_bulb_temperature
+<span class="prompt">&gt;&gt;&gt; </span>round(wet_bulb_temperature(25, 50), 2)
+<span class="out">18.0</span></code></pre></div>
+        </section>
+        <section id="equivalent_potential_temperature" class="fn-detail">
+          <h3><code>equivalent_potential_temperature</code></h3>
+          <span class="signature">equivalent_potential_temperature(temp: &#x27;float&#x27;, mixing_ratio: &#x27;float&#x27;, pressure: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;K&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Approximate equivalent potential temperature of moist air.</p>
+          <div class="equation"><span class="eqn-name">Bolton-style approximation</span><span class="katex-eq" data-tex="\theta_e=\theta\,\exp\!\left(\dfrac{L_v\,w}{c_p\,T}\right)">\theta_e=\theta\,\exp\!\left(\dfrac{L_v\,w}{c_p\,T}\right)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.temperature import equivalent_potential_temperature
+<span class="prompt">&gt;&gt;&gt; </span>round(equivalent_potential_temperature(290.0, 0.01, 90.0), 2)
+<span class="out">326.29</span></code></pre></div>
+        </section>
+        <section id="moist_adiabatic_lapse_rate" class="fn-detail">
+          <h3><code>moist_adiabatic_lapse_rate</code></h3>
+          <span class="signature">moist_adiabatic_lapse_rate(temp: &#x27;float&#x27;, mixing_ratio: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Saturated (moist) adiabatic lapse rate.</p>
+          <div class="equation"><span class="eqn-name">Saturated adiabatic lapse rate</span><span class="katex-eq" data-tex="\Gamma_m=g\,\dfrac{1+\dfrac{L_v w}{R_d T}}{c_p+\dfrac{L_v^2 w}{R_v T^2}}">\Gamma_m=g\,\dfrac{1+\dfrac{L_v w}{R_d T}}{c_p+\dfrac{L_v^2 w}{R_v T^2}}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.temperature import moist_adiabatic_lapse_rate
+<span class="prompt">&gt;&gt;&gt; </span>round(moist_adiabatic_lapse_rate(20, 0.015) * 1000, 3)
+<span class="out">4.302</span></code></pre></div>
+        </section>
+      </section>
+      <section id="humidity" class="module-section">
+        <h2><code>humidity</code> &mdash; Humidity &amp; moisture<a class="anchor" href="#humidity" aria-hidden="true">#</a></h2>
+        <p>Atmospheric moisture: saturation and actual vapor pressure, the saturation-curve slope, humidity measures, vapor pressure deficit, and precipitable water.</p>
+        <section id="saturation_vp" class="fn-detail">
+          <h3><code>saturation_vp</code></h3>
+          <span class="signature">saturation_vp(temp: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Saturation vapor pressure of water (kPa) using the Tetens formula.</p>
+          <div class="equation"><span class="eqn-name">Tetens (1930)</span><span class="katex-eq" data-tex="e_s=0.6108\,\exp\!\left(\dfrac{17.27\,T}{T+237.3}\right)">e_s=0.6108\,\exp\!\left(\dfrac{17.27\,T}{T+237.3}\right)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.humidity import saturation_vp
+<span class="prompt">&gt;&gt;&gt; </span>round(saturation_vp(20), 4)
+<span class="out">2.3382</span></code></pre></div>
+        </section>
+        <section id="actual_vp" class="fn-detail">
+          <h3><code>actual_vp</code></h3>
+          <span class="signature">actual_vp(dewpoint: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Actual vapor pressure of water (kPa) from dew point using the Tetens formula.</p>
+          <div class="equation"><span class="eqn-name">Tetens (1930), at the dew point</span><span class="katex-eq" data-tex="e=0.6108\,\exp\!\left(\dfrac{17.27\,T_d}{T_d+237.3}\right)">e=0.6108\,\exp\!\left(\dfrac{17.27\,T_d}{T_d+237.3}\right)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.humidity import actual_vp
+<span class="prompt">&gt;&gt;&gt; </span>round(actual_vp(10), 4)
+<span class="out">1.2279</span></code></pre></div>
+        </section>
+        <section id="saturation_vp_slope" class="fn-detail">
+          <h3><code>saturation_vp_slope</code></h3>
+          <span class="signature">saturation_vp_slope(temp: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Slope of the saturation vapor pressure curve (kPa/°C).</p>
+          <div class="equation"><span class="eqn-name">Slope of the Tetens curve</span><span class="katex-eq" data-tex="\Delta=\dfrac{4098\,e_s(T)}{(T+237.3)^2}">\Delta=\dfrac{4098\,e_s(T)}{(T+237.3)^2}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.humidity import saturation_vp_slope
+<span class="prompt">&gt;&gt;&gt; </span>round(saturation_vp_slope(20), 4)
+<span class="out">0.1447</span></code></pre></div>
+        </section>
+        <section id="relative_humidity" class="fn-detail">
+          <h3><code>relative_humidity</code></h3>
+          <span class="signature">relative_humidity(temp: &#x27;float&#x27;, dewpoint: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Relative humidity (%) from temperature and dew point.</p>
+          <div class="equation"><span class="eqn-name">Relative humidity</span><span class="katex-eq" data-tex="RH=100\,\dfrac{e(T_d)}{e_s(T)}">RH=100\,\dfrac{e(T_d)}{e_s(T)}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.humidity import relative_humidity
+<span class="prompt">&gt;&gt;&gt; </span>round(relative_humidity(20, 10), 1)
+<span class="out">52.5</span></code></pre></div>
+        </section>
+        <section id="specific_humidity" class="fn-detail">
+          <h3><code>specific_humidity</code></h3>
+          <span class="signature">specific_humidity(vapor_pressure: &#x27;float&#x27;, pressure: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Specific humidity (kg/kg) from vapor pressure and total pressure.</p>
+          <div class="equation"><span class="eqn-name">Specific humidity</span><span class="katex-eq" data-tex="q=\dfrac{\epsilon\,e}{P-(1-\epsilon)\,e}">q=\dfrac{\epsilon\,e}{P-(1-\epsilon)\,e}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.humidity import specific_humidity
+<span class="prompt">&gt;&gt;&gt; </span>round(specific_humidity(1.2279, 101.325), 5)
+<span class="out">0.00757</span></code></pre></div>
+        </section>
+        <section id="mixing_ratio" class="fn-detail">
+          <h3><code>mixing_ratio</code></h3>
+          <span class="signature">mixing_ratio(vapor_pressure: &#x27;float&#x27;, pressure: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Mixing ratio (kg/kg) from vapor pressure and total pressure.</p>
+          <div class="equation"><span class="eqn-name">Mixing ratio</span><span class="katex-eq" data-tex="w=\dfrac{\epsilon\,e}{P-e}">w=\dfrac{\epsilon\,e}{P-e}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.humidity import mixing_ratio
+<span class="prompt">&gt;&gt;&gt; </span>round(mixing_ratio(1.2279, 101.325), 5)
+<span class="out">0.00763</span></code></pre></div>
+        </section>
+        <section id="vapor_pressure_deficit" class="fn-detail">
+          <h3><code>vapor_pressure_deficit</code></h3>
+          <span class="signature">vapor_pressure_deficit(temp: &#x27;float&#x27;, rh: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Vapor pressure deficit (kPa) from temperature and relative humidity.</p>
+          <div class="equation"><span class="eqn-name">Vapor pressure deficit</span><span class="katex-eq" data-tex="\mathrm{VPD}=e_s(T)\left(1-\dfrac{RH}{100}\right)">\mathrm{VPD}=e_s(T)\left(1-\dfrac{RH}{100}\right)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.humidity import vapor_pressure_deficit
+<span class="prompt">&gt;&gt;&gt; </span>round(vapor_pressure_deficit(25, 60), 4)
+<span class="out">1.2671</span></code></pre></div>
+        </section>
+        <section id="absolute_humidity" class="fn-detail">
+          <h3><code>absolute_humidity</code></h3>
+          <span class="signature">absolute_humidity(vapor_pressure: &#x27;float&#x27;, temp: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Absolute humidity (kg/m³) from vapor pressure and temperature.</p>
+          <div class="equation"><span class="eqn-name">Absolute humidity (ideal gas)</span><span class="katex-eq" data-tex="\rho_v=\dfrac{e}{R_v\,T}">\rho_v=\dfrac{e}{R_v\,T}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.humidity import absolute_humidity
+<span class="prompt">&gt;&gt;&gt; </span>round(absolute_humidity(1.2279, 20), 5)
+<span class="out">0.00908</span></code></pre></div>
+        </section>
+        <section id="saturation_vp_ice" class="fn-detail">
+          <h3><code>saturation_vp_ice</code></h3>
+          <span class="signature">saturation_vp_ice(temp: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Saturation vapor pressure over ice (kPa) using the Tetens ice formula.</p>
+          <div class="equation"><span class="eqn-name">Tetens (1930), ice form</span><span class="katex-eq" data-tex="e_{s,\mathrm{ice}}=0.61078\,\exp\!\left(\dfrac{21.875\,T}{T+265.5}\right)">e_{s,\mathrm{ice}}=0.61078\,\exp\!\left(\dfrac{21.875\,T}{T+265.5}\right)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.humidity import saturation_vp_ice
+<span class="prompt">&gt;&gt;&gt; </span>round(saturation_vp_ice(-10), 4)
+<span class="out">0.2595</span></code></pre></div>
+        </section>
+        <section id="specific_humidity_from_dewpoint" class="fn-detail">
+          <h3><code>specific_humidity_from_dewpoint</code></h3>
+          <span class="signature">specific_humidity_from_dewpoint(dewpoint: &#x27;float&#x27;, pressure: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Specific humidity (kg/kg) from dew point and total pressure.</p>
+          <div class="equation"><span class="eqn-name">Specific humidity</span><span class="katex-eq" data-tex="q=\dfrac{\epsilon\,e}{P-(1-\epsilon)\,e},\quad e=e(T_d)">q=\dfrac{\epsilon\,e}{P-(1-\epsilon)\,e},\quad e=e(T_d)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.humidity import specific_humidity_from_dewpoint
+<span class="prompt">&gt;&gt;&gt; </span>round(specific_humidity_from_dewpoint(10, 101.325), 5)
+<span class="out">0.00757</span></code></pre></div>
+        </section>
+        <section id="relative_humidity_from_specific_humidity" class="fn-detail">
+          <h3><code>relative_humidity_from_specific_humidity</code></h3>
+          <span class="signature">relative_humidity_from_specific_humidity(specific_humidity: &#x27;float&#x27;, temp: &#x27;float&#x27;, pressure: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Relative humidity (%) from specific humidity, temperature, and pressure.</p>
+          <div class="equation"><span class="eqn-name">Relative humidity</span><span class="katex-eq" data-tex="e=\dfrac{qP}{\epsilon+(1-\epsilon)q},\qquad RH=100\,\dfrac{e}{e_s(T)}">e=\dfrac{qP}{\epsilon+(1-\epsilon)q},\qquad RH=100\,\dfrac{e}{e_s(T)}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.humidity import relative_humidity_from_specific_humidity
+<span class="prompt">&gt;&gt;&gt; </span>round(relative_humidity_from_specific_humidity(0.00757, 20, 101.325), 1)
+<span class="out">52.5</span></code></pre></div>
+        </section>
+        <section id="precipitable_water" class="fn-detail">
+          <h3><code>precipitable_water</code></h3>
+          <span class="signature">precipitable_water(specific_humidity: &#x27;float&#x27;, pressure: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Column precipitable water from layer-mean specific humidity.</p>
+          <div class="equation"><span class="eqn-name">Precipitable water</span><span class="katex-eq" data-tex="\mathrm{PW}=\dfrac{q\,P}{\rho_w\,g}">\mathrm{PW}=\dfrac{q\,P}{\rho_w\,g}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.humidity import precipitable_water
+<span class="prompt">&gt;&gt;&gt; </span>round(precipitable_water(0.01, 101.325), 2)
+<span class="out">103.32</span></code></pre></div>
+        </section>
+      </section>
+      <section id="wind" class="module-section">
+        <h2><code>wind</code> &mdash; Wind<a class="anchor" href="#wind" aria-hidden="true">#</a></h2>
+        <p>Wind speed and direction from components, logarithmic and power-law height adjustment, friction velocity, shear, power density, and canopy-based roughness.</p>
+        <section id="convert_wind_speed" class="fn-detail">
+          <h3><code>convert_wind_speed</code></h3>
+          <span class="signature">convert_wind_speed(speed: &#x27;float&#x27;, from_unit: &#x27;str&#x27;, to_unit: &#x27;str&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Convert wind speed between m/s, mph, km/h, and knots.</p>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.wind import convert_wind_speed
+<span class="prompt">&gt;&gt;&gt; </span>round(convert_wind_speed(10, &quot;m/s&quot;, &quot;km/h&quot;), 1)
+<span class="out">36.0</span>
+<span class="prompt">&gt;&gt;&gt; </span>round(convert_wind_speed(20, &quot;mph&quot;, &quot;m/s&quot;), 4)
+<span class="out">8.9408</span></code></pre></div>
+        </section>
+        <section id="wind_speed" class="fn-detail">
+          <h3><code>wind_speed</code></h3>
+          <span class="signature">wind_speed(u: &#x27;float&#x27;, v: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Wind speed magnitude from zonal and meridional components.</p>
+          <div class="equation"><span class="eqn-name">Wind speed</span><span class="katex-eq" data-tex="U=\sqrt{u^2+v^2}">U=\sqrt{u^2+v^2}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.wind import wind_speed
+<span class="prompt">&gt;&gt;&gt; </span>wind_speed(3.0, 4.0)
+<span class="out">5.0</span></code></pre></div>
+        </section>
+        <section id="wind_direction" class="fn-detail">
+          <h3><code>wind_direction</code></h3>
+          <span class="signature">wind_direction(u: &#x27;float&#x27;, v: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Meteorological wind direction from zonal and meridional components.</p>
+          <div class="equation"><span class="eqn-name">Wind direction</span><span class="katex-eq" data-tex="\phi=\left(270-\dfrac{180}{\pi}\operatorname{atan2}(v,u)\right)\bmod 360">\phi=\left(270-\dfrac{180}{\pi}\operatorname{atan2}(v,u)\right)\bmod 360</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.wind import wind_direction
+<span class="prompt">&gt;&gt;&gt; </span>wind_direction(0.0, -1.0)
+<span class="out">0.0</span>
+<span class="prompt">&gt;&gt;&gt; </span>wind_direction(-1.0, 0.0)
+<span class="out">90.0</span></code></pre></div>
+        </section>
+        <section id="log_wind_profile" class="fn-detail">
+          <h3><code>log_wind_profile</code></h3>
+          <span class="signature">log_wind_profile(speed_ref: &#x27;float&#x27;, height_ref: &#x27;float&#x27;, height: &#x27;float&#x27;, roughness: &#x27;float&#x27;, displacement: &#x27;float&#x27; = 0.0) -&gt; &#x27;float&#x27;</span>
+          <p>Adjust wind speed to a new height using the logarithmic wind profile.</p>
+          <div class="equation"><span class="eqn-name">Logarithmic wind profile</span><span class="katex-eq" data-tex="u(z)=u_\mathrm{ref}\,\dfrac{\ln\!\big((z-d)/z_0\big)}{\ln\!\big((z_\mathrm{ref}-d)/z_0\big)}">u(z)=u_\mathrm{ref}\,\dfrac{\ln\!\big((z-d)/z_0\big)}{\ln\!\big((z_\mathrm{ref}-d)/z_0\big)}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.wind import log_wind_profile
+<span class="prompt">&gt;&gt;&gt; </span>round(log_wind_profile(5.0, 10.0, 2.0, 0.03), 3)
+<span class="out">3.615</span></code></pre></div>
+        </section>
+        <section id="power_law_profile" class="fn-detail">
+          <h3><code>power_law_profile</code></h3>
+          <span class="signature">power_law_profile(speed_ref: &#x27;float&#x27;, height_ref: &#x27;float&#x27;, height: &#x27;float&#x27;, exponent: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Adjust wind speed to a new height using the power-law wind profile.</p>
+          <div class="equation"><span class="eqn-name">Power-law profile</span><span class="katex-eq" data-tex="u(z)=u_\mathrm{ref}\left(\dfrac{z}{z_\mathrm{ref}}\right)^{\alpha}">u(z)=u_\mathrm{ref}\left(\dfrac{z}{z_\mathrm{ref}}\right)^{\alpha}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.wind import power_law_profile
+<span class="prompt">&gt;&gt;&gt; </span>round(power_law_profile(5.0, 10.0, 50.0, 0.143), 3)
+<span class="out">6.294</span></code></pre></div>
+        </section>
+        <section id="friction_velocity" class="fn-detail">
+          <h3><code>friction_velocity</code></h3>
+          <span class="signature">friction_velocity(speed: &#x27;float&#x27;, height: &#x27;float&#x27;, roughness: &#x27;float&#x27;, displacement: &#x27;float&#x27; = 0.0, karman: &#x27;float&#x27; = 0.4) -&gt; &#x27;float&#x27;</span>
+          <p>Friction velocity from a single wind measurement (neutral stability).</p>
+          <div class="equation"><span class="eqn-name">Friction velocity</span><span class="katex-eq" data-tex="u_*=\dfrac{k\,u}{\ln\!\big((z-d)/z_0\big)}">u_*=\dfrac{k\,u}{\ln\!\big((z-d)/z_0\big)}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.wind import friction_velocity
+<span class="prompt">&gt;&gt;&gt; </span>round(friction_velocity(5.0, 10.0, 0.03), 4)
+<span class="out">0.3443</span></code></pre></div>
+        </section>
+        <section id="wind_shear" class="fn-detail">
+          <h3><code>wind_shear</code></h3>
+          <span class="signature">wind_shear(speed_lower: &#x27;float&#x27;, speed_upper: &#x27;float&#x27;, height_lower: &#x27;float&#x27;, height_upper: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Vertical wind shear between two heights.</p>
+          <div class="equation"><span class="eqn-name">Wind shear</span><span class="katex-eq" data-tex="S=\dfrac{u_\mathrm{upper}-u_\mathrm{lower}}{z_\mathrm{upper}-z_\mathrm{lower}}">S=\dfrac{u_\mathrm{upper}-u_\mathrm{lower}}{z_\mathrm{upper}-z_\mathrm{lower}}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.wind import wind_shear
+<span class="prompt">&gt;&gt;&gt; </span>round(wind_shear(3.0, 7.0, 10.0, 50.0), 3)
+<span class="out">0.1</span></code></pre></div>
+        </section>
+        <section id="wind_components" class="fn-detail">
+          <h3><code>wind_components</code></h3>
+          <span class="signature">wind_components(speed: &#x27;float&#x27;, direction: &#x27;float&#x27;) -&gt; &#x27;tuple&#x27;</span>
+          <p>Zonal and meridional wind components from speed and meteorological direction.</p>
+          <div class="equation"><span class="eqn-name">Wind components</span><span class="katex-eq" data-tex="u=-U\sin\phi,\qquad v=-U\cos\phi">u=-U\sin\phi,\qquad v=-U\cos\phi</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.wind import wind_components
+<span class="prompt">&gt;&gt;&gt; </span>u, v = wind_components(10.0, 270.0)
+<span class="prompt">&gt;&gt;&gt; </span>round(float(u), 2), round(float(v), 2)
+<span class="out">10.0 0.0</span></code></pre></div>
+        </section>
+        <section id="wind_power_density" class="fn-detail">
+          <h3><code>wind_power_density</code></h3>
+          <span class="signature">wind_power_density(speed: &#x27;float&#x27;, density: &#x27;float&#x27; = 1.225) -&gt; &#x27;float&#x27;</span>
+          <p>Wind power density of the airflow.</p>
+          <div class="equation"><span class="eqn-name">Wind power density</span><span class="katex-eq" data-tex="P=\tfrac{1}{2}\,\rho\,U^3">P=\tfrac{1}{2}\,\rho\,U^3</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.wind import wind_power_density
+<span class="prompt">&gt;&gt;&gt; </span>round(wind_power_density(8.0), 2)
+<span class="out">313.6</span></code></pre></div>
+        </section>
+        <section id="roughness_from_canopy" class="fn-detail">
+          <h3><code>roughness_from_canopy</code></h3>
+          <span class="signature">roughness_from_canopy(canopy_height: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Estimate aerodynamic roughness length from vegetation canopy height.</p>
+          <div class="equation"><span class="eqn-name">Roughness rule of thumb</span><span class="katex-eq" data-tex="z_0=0.1\,h">z_0=0.1\,h</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.wind import roughness_from_canopy
+<span class="prompt">&gt;&gt;&gt; </span>round(roughness_from_canopy(2.0), 3)
+<span class="out">0.2</span></code></pre></div>
+        </section>
+        <section id="displacement_from_canopy" class="fn-detail">
+          <h3><code>displacement_from_canopy</code></h3>
+          <span class="signature">displacement_from_canopy(canopy_height: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Estimate zero-plane displacement height from vegetation canopy height.</p>
+          <div class="equation"><span class="eqn-name">Displacement rule of thumb</span><span class="katex-eq" data-tex="d=0.67\,h">d=0.67\,h</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.wind import displacement_from_canopy
+<span class="prompt">&gt;&gt;&gt; </span>round(displacement_from_canopy(2.0), 3)
+<span class="out">1.34</span></code></pre></div>
+        </section>
+      </section>
+      <section id="atmosphere" class="module-section">
+        <h2><code>atmosphere</code> &mdash; Standard atmosphere<a class="anchor" href="#atmosphere" aria-hidden="true">#</a></h2>
+        <p>Barometric helpers: pressure scale height, pressure with altitude, hypsometric thickness, density altitude, and the US Standard Atmosphere profile.</p>
+        <section id="scale_height" class="fn-detail">
+          <h3><code>scale_height</code></h3>
+          <span class="signature">scale_height(temp: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Atmospheric pressure scale height for an isothermal layer.</p>
+          <div class="equation"><span class="eqn-name">Pressure scale height</span><span class="katex-eq" data-tex="H=\dfrac{R_d\,T}{g}">H=\dfrac{R_d\,T}{g}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.atmosphere import scale_height
+<span class="prompt">&gt;&gt;&gt; </span>round(scale_height(15), 1)
+<span class="out">8434.5</span></code></pre></div>
+        </section>
+        <section id="pressure_at_altitude" class="fn-detail">
+          <h3><code>pressure_at_altitude</code></h3>
+          <span class="signature">pressure_at_altitude(altitude: &#x27;float&#x27;, pressure_ref: &#x27;float&#x27; = 101.325, temp: &#x27;float&#x27; = 15.0, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Pressure at a given altitude using the isothermal barometric formula.</p>
+          <div class="equation"><span class="eqn-name">Isothermal barometric law</span><span class="katex-eq" data-tex="P=P_\mathrm{ref}\,\exp\!\left(-\dfrac{z}{H}\right),\quad H=\dfrac{R_d T}{g}">P=P_\mathrm{ref}\,\exp\!\left(-\dfrac{z}{H}\right),\quad H=\dfrac{R_d T}{g}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.atmosphere import pressure_at_altitude
+<span class="prompt">&gt;&gt;&gt; </span>round(pressure_at_altitude(1000), 3)
+<span class="out">89.997</span></code></pre></div>
+        </section>
+        <section id="hypsometric_thickness" class="fn-detail">
+          <h3><code>hypsometric_thickness</code></h3>
+          <span class="signature">hypsometric_thickness(pressure_lower: &#x27;float&#x27;, pressure_upper: &#x27;float&#x27;, temp: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Geopotential thickness between two pressure levels (hypsometric equation).</p>
+          <div class="equation"><span class="eqn-name">Hypsometric equation</span><span class="katex-eq" data-tex="\Delta z=\dfrac{R_d\,T}{g}\,\ln\!\dfrac{P_\mathrm{lower}}{P_\mathrm{upper}}">\Delta z=\dfrac{R_d\,T}{g}\,\ln\!\dfrac{P_\mathrm{lower}}{P_\mathrm{upper}}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.atmosphere import hypsometric_thickness
+<span class="prompt">&gt;&gt;&gt; </span>round(hypsometric_thickness(101.325, 90.0, 15), 1)
+<span class="out">999.7</span></code></pre></div>
+        </section>
+        <section id="density_altitude" class="fn-detail">
+          <h3><code>density_altitude</code></h3>
+          <span class="signature">density_altitude(pressure: &#x27;float&#x27;, temp: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Density altitude from station pressure and temperature.</p>
+          <div class="equation"><span class="eqn-name">Density altitude</span><span class="katex-eq" data-tex="\mathrm{DA}=\dfrac{T_0}{L}\left[1-\left(\dfrac{\rho}{\rho_0}\right)^{\frac{L R_d}{g-L R_d}}\right],\quad \rho=\dfrac{P}{R_d T}">\mathrm{DA}=\dfrac{T_0}{L}\left[1-\left(\dfrac{\rho}{\rho_0}\right)^{\frac{L R_d}{g-L R_d}}\right],\quad \rho=\dfrac{P}{R_d T}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.atmosphere import density_altitude
+<span class="prompt">&gt;&gt;&gt; </span>round(density_altitude(101.325, 25), 1)
+<span class="out">353.9</span></code></pre></div>
+        </section>
+        <section id="standard_atmosphere" class="fn-detail">
+          <h3><code>standard_atmosphere</code></h3>
+          <span class="signature">standard_atmosphere(altitude: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;tuple&#x27;</span>
+          <p>Temperature and pressure of the US Standard Atmosphere (troposphere).</p>
+          <div class="equation"><span class="eqn-name">US Standard Atmosphere (1976)</span><span class="katex-eq" data-tex="\begin{aligned}T&amp;=T_0-L z\\ P&amp;=P_0\left(\dfrac{T}{T_0}\right)^{g/(L R_d)}\end{aligned}\quad(T_0=288.15\,\mathrm{K},\ L=0.0065\,\mathrm{K/m})">\begin{aligned}T&amp;=T_0-L z\\ P&amp;=P_0\left(\dfrac{T}{T_0}\right)^{g/(L R_d)}\end{aligned}\quad(T_0=288.15\,\mathrm{K},\ L=0.0065\,\mathrm{K/m})</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.atmosphere import standard_atmosphere
+<span class="prompt">&gt;&gt;&gt; </span>temp, pres = standard_atmosphere(1000)
+<span class="prompt">&gt;&gt;&gt; </span>round(temp, 2)
+<span class="out">8.5</span>
+<span class="prompt">&gt;&gt;&gt; </span>round(pres, 3)
+<span class="out">89.875</span></code></pre></div>
+        </section>
+      </section>
+      </main>
+
+      <aside class="onthispage" aria-label="On this page">
+        <div class="otp-label">On this page</div>
+        <nav id="otpNav">
+          <a href="#convert_temperature"><code>convert_temperature</code></a>
+          <a href="#dewpoint_temperature"><code>dewpoint_temperature</code></a>
+          <a href="#dewpoint_from_avp"><code>dewpoint_from_avp</code></a>
+          <a href="#potential_temperature"><code>potential_temperature</code></a>
+          <a href="#virtual_temperature"><code>virtual_temperature</code></a>
+          <a href="#lapse_rate"><code>lapse_rate</code></a>
+          <a href="#surface_temperature_from_lw"><code>surface_temperature_from_lw</code></a>
+          <a href="#wet_bulb_temperature"><code>wet_bulb_temperature</code></a>
+          <a href="#equivalent_potential_temperature"><code>equivalent_potential_temperature</code></a>
+          <a href="#moist_adiabatic_lapse_rate"><code>moist_adiabatic_lapse_rate</code></a>
+          <a href="#saturation_vp"><code>saturation_vp</code></a>
+          <a href="#actual_vp"><code>actual_vp</code></a>
+          <a href="#saturation_vp_slope"><code>saturation_vp_slope</code></a>
+          <a href="#relative_humidity"><code>relative_humidity</code></a>
+          <a href="#specific_humidity"><code>specific_humidity</code></a>
+          <a href="#mixing_ratio"><code>mixing_ratio</code></a>
+          <a href="#vapor_pressure_deficit"><code>vapor_pressure_deficit</code></a>
+          <a href="#absolute_humidity"><code>absolute_humidity</code></a>
+          <a href="#saturation_vp_ice"><code>saturation_vp_ice</code></a>
+          <a href="#specific_humidity_from_dewpoint"><code>specific_humidity_from_dewpoint</code></a>
+          <a href="#relative_humidity_from_specific_humidity"><code>relative_humidity_from_specific_humidity</code></a>
+          <a href="#precipitable_water"><code>precipitable_water</code></a>
+          <a href="#convert_wind_speed"><code>convert_wind_speed</code></a>
+          <a href="#wind_speed"><code>wind_speed</code></a>
+          <a href="#wind_direction"><code>wind_direction</code></a>
+          <a href="#log_wind_profile"><code>log_wind_profile</code></a>
+          <a href="#power_law_profile"><code>power_law_profile</code></a>
+          <a href="#friction_velocity"><code>friction_velocity</code></a>
+          <a href="#wind_shear"><code>wind_shear</code></a>
+          <a href="#wind_components"><code>wind_components</code></a>
+          <a href="#wind_power_density"><code>wind_power_density</code></a>
+          <a href="#roughness_from_canopy"><code>roughness_from_canopy</code></a>
+          <a href="#displacement_from_canopy"><code>displacement_from_canopy</code></a>
+          <a href="#scale_height"><code>scale_height</code></a>
+          <a href="#pressure_at_altitude"><code>pressure_at_altitude</code></a>
+          <a href="#hypsometric_thickness"><code>hypsometric_thickness</code></a>
+          <a href="#density_altitude"><code>density_altitude</code></a>
+          <a href="#standard_atmosphere"><code>standard_atmosphere</code></a>
+        </nav>
+      </aside>
+    </div>
+
+    <footer class="site">
+      <div>&copy; 2026 Telluris Labs</div>
+      <div>Hosted on GitHub Pages</div>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atmoflux User Guide — Telluris Labs</title>
+  <meta name="description" content="User guide for atmoflux, a Python package for atmospheric and surface-energy flux calculations by Telluris Labs.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=MuseoModerno:wght@700&family=Roboto:wght@300;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <script>
+    (function () {
+      try {
+        var s = localStorage.getItem("telluris-theme");
+        var d = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", s || (d ? "dark" : "light"));
+      } catch (e) {
+        var d2 = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", d2 ? "dark" : "light");
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="page">
+    <header class="site">
+      <a href="index.html" aria-label="Telluris Labs home" style="display:flex;align-items:center;">
+        <img src="full_color.svg" alt="Telluris Labs Logo" class="logo" onerror="this.style.display='none'">
+      </a>
+      <div class="header-text">
+        <h1><a href="index.html">Telluris Labs</a></h1>
+        <p>Geospatial Software and Data Solutions</p>
+      </div>
+    </header>
+    <nav class="subnav" aria-label="Site navigation and tools">
+      <div class="topnav-links">
+        <a href="index.html">Home</a>
+        <a href="atmoflux.html">Atmoflux</a>
+      </div>
+      <span class="spacer"></span>
+      <span class="version-pill" title="Documented package version">v1.1.0</span>
+      <button id="themeToggle" class="theme-toggle" type="button"
+              aria-label="Toggle dark mode" title="Toggle light / dark theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+        </svg>
+      </button>
+    </nav>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <button class="rail-toggle" id="railToggle" type="button" aria-expanded="false" aria-controls="railBody">
+          <span>Menu</span><span class="caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="rail-body" id="railBody">
+          <div class="filter-wrap">
+            <input id="navFilter" class="filter-input" type="text"
+                   placeholder="Filter sections…" aria-label="Filter guide sections"
+                   autocomplete="off" spellcheck="false">
+          </div>
+        <nav class="toc-nav" id="sidebarNav" aria-label="atmoflux sections">
+          <div class="nav-group">
+            <span class="group-label">Getting started</span>
+            <a href="atmoflux.html#overview">Overview</a>
+            <a href="atmoflux.html#conventions">Conventions &amp; units</a>
+            <a href="atmoflux.html#citation">Citation</a>
+            <a href="atmoflux.html#installation">Installation</a>
+            <a href="atmoflux.html#quickstart">Quick start</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Atmospheric state</span>
+            <a href="atmospheric-state.html#temperature">Temperature</a>
+            <a href="atmospheric-state.html#humidity">Humidity &amp; moisture</a>
+            <a href="atmospheric-state.html#wind">Wind</a>
+            <a href="atmospheric-state.html#atmosphere">Standard atmosphere</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Radiation</span>
+            <a href="radiation.html#solar">Solar geometry</a>
+            <a href="radiation.html#radiative">Radiative fluxes</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Surface fluxes &amp; energy balance</span>
+            <a href="surface-fluxes.html#turbulent">Turbulent fluxes</a>
+            <a href="surface-fluxes.html#stability">Surface-layer stability</a>
+            <a href="surface-fluxes.html#hydro">Evaporation &amp; hydrology</a>
+            <a href="surface-fluxes.html#aerosols">Aerosols</a>
+            <a href="surface-fluxes.html#balance">Energy balance</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Core &amp; utilities</span>
+            <a href="core-utilities.html#core">Core data structures</a>
+            <a href="core-utilities.html#constants">Constants</a>
+            <a href="core-utilities.html#exceptions">Exceptions</a>
+          </div>
+        </nav>
+          <div class="filter-empty" id="filterEmpty">No matching sections.</div>
+        </div>
+      </aside>
+
+      <main>
+        <h1 class="page-title">Atmoflux User Guide</h1>
+        <p class="lede">
+          <strong>Atmoflux</strong> is a lightweight Python package for atmospheric and
+          surface-energy flux calculations. This guide is organized by topic; use the left sidebar to
+          move between modules and the right panel to jump within a page.
+        </p>
+        <section id="overview">
+          <h2>Overview<a class="anchor" href="#overview" aria-hidden="true">#</a></h2>
+          <p>
+            <strong>Atmoflux</strong> groups physically related calculations into focused modules,
+            organized into four areas: the atmospheric state, the radiation that drives surface
+            exchange, the surface fluxes and energy balance, and the shared core utilities. Use the
+            left sidebar to move between groups and modules, and the right panel to jump within a page.
+          </p>
+          <p>
+            Every public function validates its inputs and raises a descriptive subclass of
+            <code>AtmofluxError</code>, so a single <code>except&nbsp;AtmofluxError</code> clause
+            catches any package-specific failure. Functions accept NumPy arrays as well as scalars,
+            broadcasting elementwise.
+          </p>
+        </section>
+
+        <section id="conventions">
+          <h2>Conventions &amp; units<a class="anchor" href="#conventions" aria-hidden="true">#</a></h2>
+          <p>A few conventions hold throughout the package:</p>
+          <ul>
+            <li><strong>Pressure</strong> and vapor pressure are always in kilopascals (kPa).</li>
+            <li><strong>Temperature</strong> functions take a <code>unit</code> of <code>"C"</code>,
+              <code>"F"</code>, or <code>"K"</code>; internal physics runs in kelvin and results
+              return in the requested unit.</li>
+            <li><strong>Energy-balance sign convention</strong>: net radiation is positive downward
+              (into the surface); turbulent and storage fluxes are positive away from it, so a
+              perfectly closed budget has a residual of zero.</li>
+            <li><strong>Examples</strong> use the <code>&gt;&gt;&gt;</code> REPL prompt; unprompted
+              lines are output.</li>
+          </ul>
+        </section>
+
+        <section id="citation">
+          <h2>Citation<a class="anchor" href="#citation" aria-hidden="true">#</a></h2>
+          <p>
+            If you use <strong>atmoflux</strong> in academic work, please cite the software. 
+            Each release is archived via Zenodo and assigned a permanent DOI to
+            support reproducibility.
+          </p>
+          <p>
+            The DOI below is the <strong>concept DOI</strong> and always resolves to the latest release:
+          </p>
+          <p>
+            <a href="https://doi.org/10.5281/zenodo.20470203" target="_blank" rel="noopener noreferrer">https://doi.org/10.5281/zenodo.20470203</a>
+          </p>
+          <p>
+            DOIs for specific releases are available in the <strong>Versions</strong> section. For scientific reproducibility, citing the specific version used is recommended.
+          </p>
+          <p>
+            The recommended citation format is available in <code>CITATION.cff</code> and via the
+            <strong>&ldquo;Cite this repository&rdquo;</strong> button on
+            <a href="https://github.com/Telluris-Labs/atmoflux" target="_blank" rel="noopener noreferrer">GitHub</a>.
+          </p>
+        </section>
+        
+        <section id="installation">
+          <h2>Installation<a class="anchor" href="#installation" aria-hidden="true">#</a></h2>
+          <h3>Requirements</h3>
+          <ul>
+            <li>Python &ge; 3.9 (developed and tested in 3.12)</li>
+            <li><a href="https://numpy.org/" target="_blank" rel="noopener noreferrer">NumPy</a> &ge; 1.26 is the only runtime dependency</li>
+          </ul>
+          <p>
+            Keeping the dependency footprint minimal is a deliberate design goal; NumPy is the sole
+            external requirement.
+          </p>
+          <h3>From <a href="https://pypi.org/project/atmoflux/" target="_blank" rel="noopener noreferrer">PyPI</a></h3>
+          <div class="codeblock"><pre><code>pip install atmoflux</code></pre></div>
+          <h3>From <a href="https://github.com/Telluris-Labs/atmoflux" target="_blank" rel="noopener noreferrer">source</a></h3>
+          <p>
+            Clone the repository and install from the project root. Use an editable install if you
+            intend to modify the code:
+          </p>
+          <div class="codeblock"><pre><code>git clone https://github.com/Telluris-Labs/atmoflux.git
+cd atmoflux
+
+pip install .       # regular installation
+pip install -e .    # editable (development) installation</code></pre></div>
+        </section>
+
+        <section id="quickstart">
+          <h2>Quick start<a class="anchor" href="#quickstart" aria-hidden="true">#</a></h2>
+          <p>
+            Compute net all-wave radiation at a surface, then bundle the surface fluxes into an
+            <code>EnergyBalance</code> container that derives the closure residual and Bowen ratio.
+          </p>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.radiative import net_radiation
+<span class="prompt">&gt;&gt;&gt; </span>from atmoflux.balance import energy_balance
+<span class="prompt">&gt;&gt;&gt; </span>rn = net_radiation(sw_down=800.0, lw_down=350.0, albedo=0.2, temp_surface=288.0)
+<span class="prompt">&gt;&gt;&gt; </span>round(rn, 2)
+<span class="out">599.89</span>
+<span class="prompt">&gt;&gt;&gt; </span>eb = energy_balance(rn, sensible_heat=150.0, latent_heat=200.0, ground_heat=50.0)
+<span class="prompt">&gt;&gt;&gt; </span>round(eb.residual, 2)
+<span class="out">199.89</span>
+<span class="prompt">&gt;&gt;&gt; </span>round(eb.bowen_ratio, 2)
+<span class="out">0.75</span></code></pre></div>
+          <p>
+            From here, head into a group on the left &mdash; for example
+            <a href="surface-fluxes.html#hydro">Evaporation &amp; hydrology</a> &mdash; for the full
+            function set, equation provenance, and examples.
+          </p>
+        </section>
+      </main>
+
+      <aside class="onthispage" aria-label="On this page">
+        <div class="otp-label">On this page</div>
+        <nav id="otpNav">
+          <a href="#overview">Overview</a>
+          <a href="#conventions">Conventions &amp; units</a>
+          <a href="#citation">Citation</a>
+          <a href="#installation">Installation</a>
+          <a href="#quickstart">Quick start</a>
+        </nav>
+      </aside>
+    </div>
+
+    <footer class="site">
+      <div>&copy; 2026 Telluris Labs</div>
+      <div>Hosted on GitHub Pages</div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

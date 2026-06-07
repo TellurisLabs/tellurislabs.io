@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radiation — Atmoflux — Telluris Labs</title>
+  <meta name="description" content="Solar geometry and the radiative fluxes it drives at the surface.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=MuseoModerno:wght@700&family=Roboto:wght@300;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+
+  <script>
+    (function () {
+      try {
+        var s = localStorage.getItem("telluris-theme");
+        var d = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", s || (d ? "dark" : "light"));
+      } catch (e) {
+        var d2 = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", d2 ? "dark" : "light");
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="page">
+    <header class="site">
+      <a href="index.html" aria-label="Telluris Labs home" style="display:flex;align-items:center;">
+        <img src="full_color.svg" alt="Telluris Labs Logo" class="logo" onerror="this.style.display='none'">
+      </a>
+      <div class="header-text">
+        <h1><a href="index.html">Telluris Labs</a></h1>
+        <p>Geospatial Software and Data Solutions</p>
+      </div>
+    </header>
+    <nav class="subnav" aria-label="Site navigation and tools">
+      <div class="topnav-links">
+        <a href="index.html">Home</a>
+        <a href="atmoflux.html">Atmoflux</a>
+      </div>
+      <span class="spacer"></span>
+      <span class="version-pill" title="Documented package version">v1.1.0</span>
+      <button id="themeToggle" class="theme-toggle" type="button"
+              aria-label="Toggle dark mode" title="Toggle light / dark theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+        </svg>
+      </button>
+    </nav>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <button class="rail-toggle" id="railToggle" type="button" aria-expanded="false" aria-controls="railBody">
+          <span>Menu</span><span class="caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="rail-body" id="railBody">
+          <div class="filter-wrap">
+            <input id="navFilter" class="filter-input" type="text"
+                   placeholder="Filter sections…" aria-label="Filter guide sections"
+                   autocomplete="off" spellcheck="false">
+          </div>
+        <nav class="toc-nav" id="sidebarNav" aria-label="atmoflux sections">
+          <div class="nav-group">
+            <span class="group-label">Getting started</span>
+            <a href="atmoflux.html#overview">Overview</a>
+            <a href="atmoflux.html#conventions">Conventions &amp; units</a>
+            <a href="atmoflux.html#citation">Citation</a>
+            <a href="atmoflux.html#installation">Installation</a>
+            <a href="atmoflux.html#quickstart">Quick start</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Atmospheric state</span>
+            <a href="atmospheric-state.html#temperature">Temperature</a>
+            <a href="atmospheric-state.html#humidity">Humidity &amp; moisture</a>
+            <a href="atmospheric-state.html#wind">Wind</a>
+            <a href="atmospheric-state.html#atmosphere">Standard atmosphere</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Radiation</span>
+            <a href="radiation.html#solar">Solar geometry</a>
+            <a href="radiation.html#radiative">Radiative fluxes</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Surface fluxes &amp; energy balance</span>
+            <a href="surface-fluxes.html#turbulent">Turbulent fluxes</a>
+            <a href="surface-fluxes.html#stability">Surface-layer stability</a>
+            <a href="surface-fluxes.html#hydro">Evaporation &amp; hydrology</a>
+            <a href="surface-fluxes.html#aerosols">Aerosols</a>
+            <a href="surface-fluxes.html#balance">Energy balance</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Core &amp; utilities</span>
+            <a href="core-utilities.html#core">Core data structures</a>
+            <a href="core-utilities.html#constants">Constants</a>
+            <a href="core-utilities.html#exceptions">Exceptions</a>
+          </div>
+        </nav>
+          <div class="filter-empty" id="filterEmpty">No matching sections.</div>
+        </div>
+      </aside>
+
+      <main>
+        <h1 class="page-title">Radiation</h1>
+        <p class="lede">Solar geometry and the radiative fluxes it drives at the surface.</p>
+      <section id="solar" class="module-section">
+        <h2><code>solar</code> &mdash; Solar geometry<a class="anchor" href="#solar" aria-hidden="true">#</a></h2>
+        <p>Solar position and radiation geometry: declination, hour/zenith/elevation angles, daylight length, and extraterrestrial and clear-sky shortwave radiation.</p>
+        <section id="day_of_year" class="fn-detail">
+          <h3><code>day_of_year</code></h3>
+          <span class="signature">day_of_year(year: &#x27;int&#x27;, month: &#x27;int&#x27;, day: &#x27;int&#x27;) -&gt; &#x27;int&#x27;</span>
+          <p>Day-of-year (ordinal day) for a calendar date.</p>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.solar import day_of_year
+<span class="prompt">&gt;&gt;&gt; </span>day_of_year(2024, 1, 1)
+<span class="out">1</span>
+<span class="prompt">&gt;&gt;&gt; </span>day_of_year(2023, 12, 31)
+<span class="out">365</span></code></pre></div>
+        </section>
+        <section id="solar_declination" class="fn-detail">
+          <h3><code>solar_declination</code></h3>
+          <span class="signature">solar_declination(doy: &#x27;int&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Solar declination angle for a given day of year.</p>
+          <div class="equation"><span class="eqn-name">Cooper (1969)</span><span class="katex-eq" data-tex="\delta=23.45\sin\!\left(\dfrac{360(284+n)}{365}\right)">\delta=23.45\sin\!\left(\dfrac{360(284+n)}{365}\right)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.solar import solar_declination
+<span class="prompt">&gt;&gt;&gt; </span>round(solar_declination(172), 2)
+<span class="out">23.45</span>
+<span class="prompt">&gt;&gt;&gt; </span>round(solar_declination(355), 2)
+<span class="out">-23.45</span></code></pre></div>
+        </section>
+        <section id="hour_angle" class="fn-detail">
+          <h3><code>hour_angle</code></h3>
+          <span class="signature">hour_angle(solar_time: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Solar hour angle from local solar time.</p>
+          <div class="equation"><span class="eqn-name">Hour angle</span><span class="katex-eq" data-tex="H=15\,(t_\mathrm{solar}-12)">H=15\,(t_\mathrm{solar}-12)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.solar import hour_angle
+<span class="prompt">&gt;&gt;&gt; </span>hour_angle(12.0)
+<span class="out">0.0</span>
+<span class="prompt">&gt;&gt;&gt; </span>hour_angle(6.0)
+<span class="out">-90.0</span></code></pre></div>
+        </section>
+        <section id="solar_zenith_angle" class="fn-detail">
+          <h3><code>solar_zenith_angle</code></h3>
+          <span class="signature">solar_zenith_angle(latitude: &#x27;float&#x27;, declination: &#x27;float&#x27;, hour_angle: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Solar zenith angle from latitude, declination, and hour angle.</p>
+          <div class="equation"><span class="eqn-name">Solar zenith angle</span><span class="katex-eq" data-tex="\cos\theta_z=\sin\varphi\sin\delta+\cos\varphi\cos\delta\cos H">\cos\theta_z=\sin\varphi\sin\delta+\cos\varphi\cos\delta\cos H</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.solar import solar_zenith_angle
+<span class="prompt">&gt;&gt;&gt; </span>round(solar_zenith_angle(0.0, 0.0, 0.0), 2)
+<span class="out">0.0</span>
+<span class="prompt">&gt;&gt;&gt; </span>round(solar_zenith_angle(40.0, 20.0, 0.0), 2)
+<span class="out">20.0</span></code></pre></div>
+        </section>
+        <section id="solar_elevation" class="fn-detail">
+          <h3><code>solar_elevation</code></h3>
+          <span class="signature">solar_elevation(latitude: &#x27;float&#x27;, declination: &#x27;float&#x27;, hour_angle: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Solar elevation (altitude) angle above the horizon.</p>
+          <div class="equation"><span class="eqn-name">Solar elevation</span><span class="katex-eq" data-tex="\beta=90^\circ-\theta_z">\beta=90^\circ-\theta_z</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.solar import solar_elevation
+<span class="prompt">&gt;&gt;&gt; </span>round(solar_elevation(40.0, 20.0, 0.0), 2)
+<span class="out">70.0</span></code></pre></div>
+        </section>
+        <section id="sunset_hour_angle" class="fn-detail">
+          <h3><code>sunset_hour_angle</code></h3>
+          <span class="signature">sunset_hour_angle(latitude: &#x27;float&#x27;, declination: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Sunset hour angle for a given latitude and declination.</p>
+          <div class="equation"><span class="eqn-name">Sunset hour angle</span><span class="katex-eq" data-tex="\cos H_s=-\tan\varphi\tan\delta">\cos H_s=-\tan\varphi\tan\delta</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.solar import sunset_hour_angle
+<span class="prompt">&gt;&gt;&gt; </span>round(sunset_hour_angle(0.0, 0.0), 2)
+<span class="out">90.0</span></code></pre></div>
+        </section>
+        <section id="daylight_hours" class="fn-detail">
+          <h3><code>daylight_hours</code></h3>
+          <span class="signature">daylight_hours(latitude: &#x27;float&#x27;, declination: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Length of daylight for a given latitude and declination.</p>
+          <div class="equation"><span class="eqn-name">Daylight hours</span><span class="katex-eq" data-tex="N=\tfrac{2}{15}\,H_s">N=\tfrac{2}{15}\,H_s</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.solar import daylight_hours
+<span class="prompt">&gt;&gt;&gt; </span>round(daylight_hours(0.0, 0.0), 2)
+<span class="out">12.0</span></code></pre></div>
+        </section>
+        <section id="extraterrestrial_radiation" class="fn-detail">
+          <h3><code>extraterrestrial_radiation</code></h3>
+          <span class="signature">extraterrestrial_radiation(latitude: &#x27;float&#x27;, doy: &#x27;int&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Daily extraterrestrial (top-of-atmosphere) solar radiation.</p>
+          <div class="equation"><span class="eqn-name">FAO-56 (Allen et al., 1998)</span><span class="katex-eq" data-tex="\begin{aligned}d_r&amp;=1+0.033\cos\!\dfrac{2\pi n}{365}\\ R_a&amp;=\dfrac{24\cdot 60}{\pi}\,G_{sc}\,d_r\big(H_s\sin\varphi\sin\delta+\cos\varphi\cos\delta\sin H_s\big)\end{aligned}">\begin{aligned}d_r&amp;=1+0.033\cos\!\dfrac{2\pi n}{365}\\ R_a&amp;=\dfrac{24\cdot 60}{\pi}\,G_{sc}\,d_r\big(H_s\sin\varphi\sin\delta+\cos\varphi\cos\delta\sin H_s\big)\end{aligned}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.solar import extraterrestrial_radiation
+<span class="prompt">&gt;&gt;&gt; </span>round(extraterrestrial_radiation(0.0, 172), 2)
+<span class="out">33.24</span></code></pre></div>
+        </section>
+        <section id="clear_sky_radiation" class="fn-detail">
+          <h3><code>clear_sky_radiation</code></h3>
+          <span class="signature">clear_sky_radiation(extraterrestrial: &#x27;float&#x27;, sunshine_hours: &#x27;float&#x27;, daylight: &#x27;float&#x27;, a: &#x27;float&#x27; = 0.25, b: &#x27;float&#x27; = 0.5) -&gt; &#x27;float&#x27;</span>
+          <p>Incoming shortwave radiation from the Angstrom-Prescott relation.</p>
+          <div class="equation"><span class="eqn-name">Ångström–Prescott</span><span class="katex-eq" data-tex="R_s=\left(a+b\,\dfrac{n}{N}\right)R_a">R_s=\left(a+b\,\dfrac{n}{N}\right)R_a</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.solar import clear_sky_radiation
+<span class="prompt">&gt;&gt;&gt; </span>round(clear_sky_radiation(36.16, 10.0, 12.0), 3)
+<span class="out">24.107</span></code></pre></div>
+        </section>
+      </section>
+      <section id="radiative" class="module-section">
+        <h2><code>radiative</code> &mdash; Radiative fluxes<a class="anchor" href="#radiative" aria-hidden="true">#</a></h2>
+        <p>Surface radiative fluxes: blackbody emission, net shortwave and longwave, net all-wave radiation, clear-sky emissivity, and the diffuse fraction.</p>
+        <section id="blackbody_radiation" class="fn-detail">
+          <h3><code>blackbody_radiation</code></h3>
+          <span class="signature">blackbody_radiation(temp: &#x27;float&#x27;, emissivity: &#x27;float&#x27; = 1.0, unit: &#x27;str&#x27; = &#x27;K&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Radiant emittance of a surface from the Stefan-Boltzmann law.</p>
+          <div class="equation"><span class="eqn-name">Stefan–Boltzmann law</span><span class="katex-eq" data-tex="L=\varepsilon\,\sigma\,T^4">L=\varepsilon\,\sigma\,T^4</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.radiative import blackbody_radiation
+<span class="prompt">&gt;&gt;&gt; </span>round(blackbody_radiation(288.0), 2)
+<span class="out">390.11</span>
+<span class="prompt">&gt;&gt;&gt; </span>round(blackbody_radiation(15.0, 0.97, unit=&quot;C&quot;), 2)
+<span class="out">379.19</span></code></pre></div>
+        </section>
+        <section id="net_shortwave" class="fn-detail">
+          <h3><code>net_shortwave</code></h3>
+          <span class="signature">net_shortwave(sw_down: &#x27;float&#x27;, albedo: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Net shortwave radiation absorbed at a surface.</p>
+          <div class="equation"><span class="eqn-name">Net shortwave</span><span class="katex-eq" data-tex="SW_\mathrm{net}=SW_\downarrow\,(1-\alpha)">SW_\mathrm{net}=SW_\downarrow\,(1-\alpha)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.radiative import net_shortwave
+<span class="prompt">&gt;&gt;&gt; </span>net_shortwave(800.0, 0.2)
+<span class="out">640.0</span></code></pre></div>
+        </section>
+        <section id="net_longwave" class="fn-detail">
+          <h3><code>net_longwave</code></h3>
+          <span class="signature">net_longwave(lw_down: &#x27;float&#x27;, temp_surface: &#x27;float&#x27;, emissivity: &#x27;float&#x27; = 1.0, unit: &#x27;str&#x27; = &#x27;K&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Net longwave radiation at a surface (positive into the surface).</p>
+          <div class="equation"><span class="eqn-name">Net longwave</span><span class="katex-eq" data-tex="\begin{aligned}LW_\uparrow&amp;=\varepsilon\sigma T_s^4+(1-\varepsilon)\,LW_\downarrow\\ LW_\mathrm{net}&amp;=LW_\downarrow-LW_\uparrow\end{aligned}">\begin{aligned}LW_\uparrow&amp;=\varepsilon\sigma T_s^4+(1-\varepsilon)\,LW_\downarrow\\ LW_\mathrm{net}&amp;=LW_\downarrow-LW_\uparrow\end{aligned}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.radiative import net_longwave
+<span class="prompt">&gt;&gt;&gt; </span>round(net_longwave(350.0, 288.0), 2)
+<span class="out">-40.11</span></code></pre></div>
+        </section>
+        <section id="net_radiation" class="fn-detail">
+          <h3><code>net_radiation</code></h3>
+          <span class="signature">net_radiation(sw_down: &#x27;float&#x27;, lw_down: &#x27;float&#x27;, albedo: &#x27;float&#x27;, temp_surface: &#x27;float&#x27;, emissivity: &#x27;float&#x27; = 1.0, unit: &#x27;str&#x27; = &#x27;K&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Net all-wave radiation at a surface.</p>
+          <div class="equation"><span class="eqn-name">Net all-wave radiation</span><span class="katex-eq" data-tex="R_n=SW_\mathrm{net}+LW_\mathrm{net}=SW_\downarrow(1-\alpha)+(LW_\downarrow-LW_\uparrow)">R_n=SW_\mathrm{net}+LW_\mathrm{net}=SW_\downarrow(1-\alpha)+(LW_\downarrow-LW_\uparrow)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.radiative import net_radiation
+<span class="prompt">&gt;&gt;&gt; </span>round(net_radiation(800.0, 350.0, 0.2, 288.0), 2)
+<span class="out">599.89</span></code></pre></div>
+        </section>
+        <section id="clear_sky_emissivity" class="fn-detail">
+          <h3><code>clear_sky_emissivity</code></h3>
+          <span class="signature">clear_sky_emissivity(temp_air: &#x27;float&#x27;, vapor_pressure: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Clear-sky atmospheric emissivity using Brutsaert&#x27;s relation.</p>
+          <div class="equation"><span class="eqn-name">Brutsaert (1975)</span><span class="katex-eq" data-tex="\varepsilon=1.24\left(\dfrac{e}{T}\right)^{1/7}">\varepsilon=1.24\left(\dfrac{e}{T}\right)^{1/7}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.radiative import clear_sky_emissivity
+<span class="prompt">&gt;&gt;&gt; </span>round(clear_sky_emissivity(20, 1.5), 4)
+<span class="out">0.8109</span></code></pre></div>
+        </section>
+        <section id="net_longwave_cloud" class="fn-detail">
+          <h3><code>net_longwave_cloud</code></h3>
+          <span class="signature">net_longwave_cloud(temp_air: &#x27;float&#x27;, vapor_pressure: &#x27;float&#x27;, cloud_fraction: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Net longwave radiation at the surface with a cloud adjustment (FAO-56 style).</p>
+          <div class="equation"><span class="eqn-name">FAO-56 net longwave</span><span class="katex-eq" data-tex="R_{nl}=\sigma T^4\,(0.34-0.14\sqrt{e})\left(1.35\,\dfrac{R_s}{R_{so}}-0.35\right)">R_{nl}=\sigma T^4\,(0.34-0.14\sqrt{e})\left(1.35\,\dfrac{R_s}{R_{so}}-0.35\right)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.radiative import net_longwave_cloud
+<span class="prompt">&gt;&gt;&gt; </span>round(net_longwave_cloud(20, 1.5, 1.0), 2)
+<span class="out">70.58</span></code></pre></div>
+        </section>
+        <section id="diffuse_fraction" class="fn-detail">
+          <h3><code>diffuse_fraction</code></h3>
+          <span class="signature">diffuse_fraction(clearness_index: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Diffuse fraction of global shortwave radiation from the clearness index.</p>
+          <div class="equation"><span class="eqn-name">Erbs et al. (1982)</span><span class="katex-eq" data-tex="k_d=\begin{cases}1-0.09\,k_t &amp; k_t\le 0.22\\[2pt]0.9511-0.1604\,k_t+4.388\,k_t^2-16.638\,k_t^3+12.336\,k_t^4 &amp; 0.22&lt;k_t\le 0.80\\[2pt]0.165 &amp; k_t&gt;0.80\end{cases}">k_d=\begin{cases}1-0.09\,k_t &amp; k_t\le 0.22\\[2pt]0.9511-0.1604\,k_t+4.388\,k_t^2-16.638\,k_t^3+12.336\,k_t^4 &amp; 0.22&lt;k_t\le 0.80\\[2pt]0.165 &amp; k_t&gt;0.80\end{cases}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.radiative import diffuse_fraction
+<span class="prompt">&gt;&gt;&gt; </span>round(diffuse_fraction(0.5), 4)
+<span class="out">0.6591</span></code></pre></div>
+        </section>
+      </section>
+      </main>
+
+      <aside class="onthispage" aria-label="On this page">
+        <div class="otp-label">On this page</div>
+        <nav id="otpNav">
+          <a href="#day_of_year"><code>day_of_year</code></a>
+          <a href="#solar_declination"><code>solar_declination</code></a>
+          <a href="#hour_angle"><code>hour_angle</code></a>
+          <a href="#solar_zenith_angle"><code>solar_zenith_angle</code></a>
+          <a href="#solar_elevation"><code>solar_elevation</code></a>
+          <a href="#sunset_hour_angle"><code>sunset_hour_angle</code></a>
+          <a href="#daylight_hours"><code>daylight_hours</code></a>
+          <a href="#extraterrestrial_radiation"><code>extraterrestrial_radiation</code></a>
+          <a href="#clear_sky_radiation"><code>clear_sky_radiation</code></a>
+          <a href="#blackbody_radiation"><code>blackbody_radiation</code></a>
+          <a href="#net_shortwave"><code>net_shortwave</code></a>
+          <a href="#net_longwave"><code>net_longwave</code></a>
+          <a href="#net_radiation"><code>net_radiation</code></a>
+          <a href="#clear_sky_emissivity"><code>clear_sky_emissivity</code></a>
+          <a href="#net_longwave_cloud"><code>net_longwave_cloud</code></a>
+          <a href="#diffuse_fraction"><code>diffuse_fraction</code></a>
+        </nav>
+      </aside>
+    </div>
+
+    <footer class="site">
+      <div>&copy; 2026 Telluris Labs</div>
+      <div>Hosted on GitHub Pages</div>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

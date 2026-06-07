@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surface fluxes & energy balance — Atmoflux — Telluris Labs</title>
+  <meta name="description" content="Turbulent transfer of momentum, heat, moisture, and particles, the stability that governs it, and the surface energy budget that integrates every flux.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=MuseoModerno:wght@700&family=Roboto:wght@300;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+
+  <script>
+    (function () {
+      try {
+        var s = localStorage.getItem("telluris-theme");
+        var d = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", s || (d ? "dark" : "light"));
+      } catch (e) {
+        var d2 = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", d2 ? "dark" : "light");
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="page">
+    <header class="site">
+      <a href="index.html" aria-label="Telluris Labs home" style="display:flex;align-items:center;">
+        <img src="full_color.svg" alt="Telluris Labs Logo" class="logo" onerror="this.style.display='none'">
+      </a>
+      <div class="header-text">
+        <h1><a href="index.html">Telluris Labs</a></h1>
+        <p>Geospatial Software and Data Solutions</p>
+      </div>
+    </header>
+    <nav class="subnav" aria-label="Site navigation and tools">
+      <div class="topnav-links">
+        <a href="index.html">Home</a>
+        <a href="atmoflux.html">Atmoflux</a>
+      </div>
+      <span class="spacer"></span>
+      <span class="version-pill" title="Documented package version">v1.1.0</span>
+      <button id="themeToggle" class="theme-toggle" type="button"
+              aria-label="Toggle dark mode" title="Toggle light / dark theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+        </svg>
+      </button>
+    </nav>
+
+    <div class="layout">
+      <aside class="sidebar">
+        <button class="rail-toggle" id="railToggle" type="button" aria-expanded="false" aria-controls="railBody">
+          <span>Menu</span><span class="caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="rail-body" id="railBody">
+          <div class="filter-wrap">
+            <input id="navFilter" class="filter-input" type="text"
+                   placeholder="Filter sections…" aria-label="Filter guide sections"
+                   autocomplete="off" spellcheck="false">
+          </div>
+        <nav class="toc-nav" id="sidebarNav" aria-label="atmoflux sections">
+          <div class="nav-group">
+            <span class="group-label">Getting started</span>
+            <a href="atmoflux.html#overview">Overview</a>
+            <a href="atmoflux.html#conventions">Conventions &amp; units</a>
+            <a href="atmoflux.html#citation">Citation</a>
+            <a href="atmoflux.html#installation">Installation</a>
+            <a href="atmoflux.html#quickstart">Quick start</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Atmospheric state</span>
+            <a href="atmospheric-state.html#temperature">Temperature</a>
+            <a href="atmospheric-state.html#humidity">Humidity &amp; moisture</a>
+            <a href="atmospheric-state.html#wind">Wind</a>
+            <a href="atmospheric-state.html#atmosphere">Standard atmosphere</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Radiation</span>
+            <a href="radiation.html#solar">Solar geometry</a>
+            <a href="radiation.html#radiative">Radiative fluxes</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Surface fluxes &amp; energy balance</span>
+            <a href="surface-fluxes.html#turbulent">Turbulent fluxes</a>
+            <a href="surface-fluxes.html#stability">Surface-layer stability</a>
+            <a href="surface-fluxes.html#hydro">Evaporation &amp; hydrology</a>
+            <a href="surface-fluxes.html#aerosols">Aerosols</a>
+            <a href="surface-fluxes.html#balance">Energy balance</a>
+          </div>
+          <div class="nav-group">
+            <span class="group-label">Core &amp; utilities</span>
+            <a href="core-utilities.html#core">Core data structures</a>
+            <a href="core-utilities.html#constants">Constants</a>
+            <a href="core-utilities.html#exceptions">Exceptions</a>
+          </div>
+        </nav>
+          <div class="filter-empty" id="filterEmpty">No matching sections.</div>
+        </div>
+      </aside>
+
+      <main>
+        <h1 class="page-title">Surface fluxes &amp; energy balance</h1>
+        <p class="lede">Turbulent transfer of momentum, heat, moisture, and particles, the stability that governs it, and the surface energy budget that integrates every flux.</p>
+      <section id="turbulent" class="module-section">
+        <h2><code>turbulent</code> &mdash; Turbulent fluxes<a class="anchor" href="#turbulent" aria-hidden="true">#</a></h2>
+        <p>Bulk-aerodynamic turbulent fluxes and the surface-layer quantities they need: air density, sensible and latent heat flux, transfer coefficients, shear stress, and resistance.</p>
+        <section id="air_density" class="fn-detail">
+          <h3><code>air_density</code></h3>
+          <span class="signature">air_density(temp: &#x27;float&#x27;, pressure: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Density of dry air from temperature and pressure (ideal gas law).</p>
+          <div class="equation"><span class="eqn-name">Ideal gas law</span><span class="katex-eq" data-tex="\rho=\dfrac{P}{R_d\,T}">\rho=\dfrac{P}{R_d\,T}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.turbulent import air_density
+<span class="prompt">&gt;&gt;&gt; </span>round(air_density(15, 101.325), 4)
+<span class="out">1.225</span></code></pre></div>
+        </section>
+        <section id="sensible_heat_flux" class="fn-detail">
+          <h3><code>sensible_heat_flux</code></h3>
+          <span class="signature">sensible_heat_flux(density: &#x27;float&#x27;, wind_speed: &#x27;float&#x27;, temp_air: &#x27;float&#x27;, temp_surface: &#x27;float&#x27;, transfer_coeff: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Bulk-aerodynamic sensible heat flux.</p>
+          <div class="equation"><span class="eqn-name">Bulk-aerodynamic form</span><span class="katex-eq" data-tex="H=\rho\,c_p\,C_h\,U\,(T_s-T_a)">H=\rho\,c_p\,C_h\,U\,(T_s-T_a)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.turbulent import sensible_heat_flux
+<span class="prompt">&gt;&gt;&gt; </span>round(sensible_heat_flux(1.2, 3.0, 20.0, 25.0, 0.0013), 4)
+<span class="out">23.517</span></code></pre></div>
+        </section>
+        <section id="latent_heat_flux" class="fn-detail">
+          <h3><code>latent_heat_flux</code></h3>
+          <span class="signature">latent_heat_flux(density: &#x27;float&#x27;, wind_speed: &#x27;float&#x27;, q_air: &#x27;float&#x27;, q_surface: &#x27;float&#x27;, transfer_coeff: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Bulk-aerodynamic latent heat flux.</p>
+          <div class="equation"><span class="eqn-name">Bulk-aerodynamic form</span><span class="katex-eq" data-tex="LE=\rho\,L_v\,C_e\,U\,(q_s-q_a)">LE=\rho\,L_v\,C_e\,U\,(q_s-q_a)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.turbulent import latent_heat_flux
+<span class="prompt">&gt;&gt;&gt; </span>round(latent_heat_flux(1.2, 3.0, 0.008, 0.012, 0.0013), 4)
+<span class="out">45.864</span></code></pre></div>
+        </section>
+        <section id="bulk_transfer_coefficient" class="fn-detail">
+          <h3><code>bulk_transfer_coefficient</code></h3>
+          <span class="signature">bulk_transfer_coefficient(height: &#x27;float&#x27;, roughness: &#x27;float&#x27;, displacement: &#x27;float&#x27; = 0.0, karman: &#x27;float&#x27; = 0.4) -&gt; &#x27;float&#x27;</span>
+          <p>Neutral bulk transfer coefficient from surface-layer geometry.</p>
+          <div class="equation"><span class="eqn-name">Neutral transfer coefficient</span><span class="katex-eq" data-tex="C=\dfrac{k^2}{\big[\ln((z-d)/z_0)\big]^2}">C=\dfrac{k^2}{\big[\ln((z-d)/z_0)\big]^2}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.turbulent import bulk_transfer_coefficient
+<span class="prompt">&gt;&gt;&gt; </span>round(bulk_transfer_coefficient(10.0, 0.03), 6)
+<span class="out">0.004741</span></code></pre></div>
+        </section>
+        <section id="surface_shear_stress" class="fn-detail">
+          <h3><code>surface_shear_stress</code></h3>
+          <span class="signature">surface_shear_stress(density: &#x27;float&#x27;, friction_velocity: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Surface shear stress (momentum flux) from friction velocity.</p>
+          <div class="equation"><span class="eqn-name">Surface shear stress</span><span class="katex-eq" data-tex="\tau=\rho\,u_*^2">\tau=\rho\,u_*^2</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.turbulent import surface_shear_stress
+<span class="prompt">&gt;&gt;&gt; </span>round(surface_shear_stress(1.225, 0.3), 5)
+<span class="out">0.11025</span></code></pre></div>
+        </section>
+        <section id="aerodynamic_resistance" class="fn-detail">
+          <h3><code>aerodynamic_resistance</code></h3>
+          <span class="signature">aerodynamic_resistance(wind_speed: &#x27;float&#x27;, height: &#x27;float&#x27;, roughness: &#x27;float&#x27;, displacement: &#x27;float&#x27; = 0.0, karman: &#x27;float&#x27; = 0.4) -&gt; &#x27;float&#x27;</span>
+          <p>Neutral aerodynamic resistance to turbulent transfer.</p>
+          <div class="equation"><span class="eqn-name">Neutral aerodynamic resistance</span><span class="katex-eq" data-tex="r_a=\dfrac{\big[\ln((z-d)/z_0)\big]^2}{k^2\,U}">r_a=\dfrac{\big[\ln((z-d)/z_0)\big]^2}{k^2\,U}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.turbulent import aerodynamic_resistance
+<span class="prompt">&gt;&gt;&gt; </span>round(aerodynamic_resistance(3.0, 10.0, 0.03), 2)
+<span class="out">70.3</span></code></pre></div>
+        </section>
+      </section>
+      <section id="stability" class="module-section">
+        <h2><code>stability</code> &mdash; Surface-layer stability<a class="anchor" href="#stability" aria-hidden="true">#</a></h2>
+        <p>Closed-form surface-layer stability diagnostics: bulk Richardson number, Monin–Obukhov length and stability parameter, the correction functions, and a stability class.</p>
+        <section id="bulk_richardson_number" class="fn-detail">
+          <h3><code>bulk_richardson_number</code></h3>
+          <span class="signature">bulk_richardson_number(temp_lower: &#x27;float&#x27;, temp_upper: &#x27;float&#x27;, wind_upper: &#x27;float&#x27;, height_lower: &#x27;float&#x27;, height_upper: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Bulk Richardson number between two heights.</p>
+          <div class="equation"><span class="eqn-name">Bulk Richardson number</span><span class="katex-eq" data-tex="R_b=\dfrac{g\,\Delta\theta\,\Delta z}{T_\mathrm{mean}\,U^2}">R_b=\dfrac{g\,\Delta\theta\,\Delta z}{T_\mathrm{mean}\,U^2}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.stability import bulk_richardson_number
+<span class="prompt">&gt;&gt;&gt; </span>round(bulk_richardson_number(15, 14, 5.0, 2.0, 10.0), 5)
+<span class="out">-0.01091</span></code></pre></div>
+        </section>
+        <section id="obukhov_length" class="fn-detail">
+          <h3><code>obukhov_length</code></h3>
+          <span class="signature">obukhov_length(friction_velocity: &#x27;float&#x27;, temp: &#x27;float&#x27;, sensible_heat_flux: &#x27;float&#x27;, density: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Monin-Obukhov length from friction velocity and sensible heat flux.</p>
+          <div class="equation"><span class="eqn-name">Monin–Obukhov length</span><span class="katex-eq" data-tex="L=-\dfrac{\rho\,c_p\,T\,u_*^3}{k\,g\,H}">L=-\dfrac{\rho\,c_p\,T\,u_*^3}{k\,g\,H}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.stability import obukhov_length
+<span class="prompt">&gt;&gt;&gt; </span>round(obukhov_length(0.3, 20, 100.0, 1.2), 3)
+<span class="out">-24.334</span></code></pre></div>
+        </section>
+        <section id="stability_parameter" class="fn-detail">
+          <h3><code>stability_parameter</code></h3>
+          <span class="signature">stability_parameter(height: &#x27;float&#x27;, obukhov_length: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Monin-Obukhov stability parameter zeta = z / L.</p>
+          <div class="equation"><span class="eqn-name">Stability parameter</span><span class="katex-eq" data-tex="\zeta=\dfrac{z}{L}">\zeta=\dfrac{z}{L}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.stability import stability_parameter
+<span class="prompt">&gt;&gt;&gt; </span>round(stability_parameter(10.0, -50.0), 2)
+<span class="out">-0.2</span></code></pre></div>
+        </section>
+        <section id="psi_momentum" class="fn-detail">
+          <h3><code>psi_momentum</code></h3>
+          <span class="signature">psi_momentum(zeta: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Integrated stability correction function for momentum.</p>
+          <div class="equation"><span class="eqn-name">Businger–Dyer (momentum)</span><span class="katex-eq" data-tex="\psi_m=\begin{cases}2\ln\dfrac{1+x}{2}+\ln\dfrac{1+x^2}{2}-2\arctan x+\dfrac{\pi}{2}, &amp; \zeta&lt;0\\[4pt]-5\zeta, &amp; \zeta\ge 0\end{cases}\quad x=(1-16\zeta)^{1/4}">\psi_m=\begin{cases}2\ln\dfrac{1+x}{2}+\ln\dfrac{1+x^2}{2}-2\arctan x+\dfrac{\pi}{2}, &amp; \zeta&lt;0\\[4pt]-5\zeta, &amp; \zeta\ge 0\end{cases}\quad x=(1-16\zeta)^{1/4}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.stability import psi_momentum
+<span class="prompt">&gt;&gt;&gt; </span>psi_momentum(0.1)
+<span class="out">-0.5</span>
+<span class="prompt">&gt;&gt;&gt; </span>round(psi_momentum(-0.1), 4)
+<span class="out">0.2836</span></code></pre></div>
+        </section>
+        <section id="psi_heat" class="fn-detail">
+          <h3><code>psi_heat</code></h3>
+          <span class="signature">psi_heat(zeta: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Integrated stability correction function for heat.</p>
+          <div class="equation"><span class="eqn-name">Businger–Dyer (heat)</span><span class="katex-eq" data-tex="\psi_h=\begin{cases}2\ln\dfrac{1+y}{2}, &amp; \zeta&lt;0\\[4pt]-5\zeta, &amp; \zeta\ge 0\end{cases}\quad y=(1-16\zeta)^{1/2}">\psi_h=\begin{cases}2\ln\dfrac{1+y}{2}, &amp; \zeta&lt;0\\[4pt]-5\zeta, &amp; \zeta\ge 0\end{cases}\quad y=(1-16\zeta)^{1/2}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.stability import psi_heat
+<span class="prompt">&gt;&gt;&gt; </span>psi_heat(0.1)
+<span class="out">-0.5</span>
+<span class="prompt">&gt;&gt;&gt; </span>round(psi_heat(-0.1), 4)
+<span class="out">0.5343</span></code></pre></div>
+        </section>
+        <section id="stability_class" class="fn-detail">
+          <h3><code>stability_class</code></h3>
+          <span class="signature">stability_class(richardson: &#x27;float&#x27;) -&gt; &#x27;str&#x27;</span>
+          <p>Qualitative stability class from a bulk Richardson number.</p>
+          <div class="equation"><span class="eqn-name">Threshold scheme</span><span class="katex-eq" data-tex="\text{class}=\begin{cases}\text{unstable}, &amp; R_b&lt;-0.01\\ \text{neutral}, &amp; |R_b|\le 0.01\\ \text{stable}, &amp; R_b&gt;0.01\end{cases}">\text{class}=\begin{cases}\text{unstable}, &amp; R_b&lt;-0.01\\ \text{neutral}, &amp; |R_b|\le 0.01\\ \text{stable}, &amp; R_b&gt;0.01\end{cases}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.stability import stability_class
+<span class="prompt">&gt;&gt;&gt; </span>stability_class(-0.5)
+<span class="out">&#x27;unstable&#x27;</span>
+<span class="prompt">&gt;&gt;&gt; </span>stability_class(0.0)
+<span class="out">&#x27;neutral&#x27;</span>
+<span class="prompt">&gt;&gt;&gt; </span>stability_class(0.5)
+<span class="out">&#x27;stable&#x27;</span></code></pre></div>
+        </section>
+      </section>
+      <section id="hydro" class="module-section">
+        <h2><code>hydro</code> &mdash; Evaporation &amp; hydrology<a class="anchor" href="#hydro" aria-hidden="true">#</a></h2>
+        <p>Water fluxes: latent-heat-to-evaporation conversion and the Penman, Penman–Monteith, FAO-56, equilibrium, Priestley–Taylor, and Hargreaves methods.</p>
+        <section id="latent_heat_to_evaporation" class="fn-detail">
+          <h3><code>latent_heat_to_evaporation</code></h3>
+          <span class="signature">latent_heat_to_evaporation(latent_heat: &#x27;float&#x27;, density_water: &#x27;float&#x27; = 1000.0) -&gt; &#x27;float&#x27;</span>
+          <p>Convert latent heat flux to an equivalent evaporation depth.</p>
+          <div class="equation"><span class="eqn-name">Latent-heat-to-evaporation</span><span class="katex-eq" data-tex="E=\dfrac{LE}{L_v\,\rho_w}\times 1000\times 86400\ \ [\mathrm{mm/day}]">E=\dfrac{LE}{L_v\,\rho_w}\times 1000\times 86400\ \ [\mathrm{mm/day}]</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.hydro import latent_heat_to_evaporation
+<span class="prompt">&gt;&gt;&gt; </span>round(latent_heat_to_evaporation(100.0), 3)
+<span class="out">3.527</span></code></pre></div>
+        </section>
+        <section id="penman_evaporation" class="fn-detail">
+          <h3><code>penman_evaporation</code></h3>
+          <span class="signature">penman_evaporation(net_radiation: &#x27;float&#x27;, ground_heat: &#x27;float&#x27;, temp: &#x27;float&#x27;, wind_2m: &#x27;float&#x27;, es: &#x27;float&#x27;, ea: &#x27;float&#x27;, pressure: &#x27;float&#x27; = 101.325, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Open-water evaporation using the Penman combination equation.</p>
+          <div class="equation"><span class="eqn-name">Penman (1948)</span><span class="katex-eq" data-tex="ET=\dfrac{\Delta(R_n-G)+\gamma\,E_a}{\lambda(\Delta+\gamma)},\quad E_a=6.43\,(1+0.536\,u_2)(e_s-e_a)">ET=\dfrac{\Delta(R_n-G)+\gamma\,E_a}{\lambda(\Delta+\gamma)},\quad E_a=6.43\,(1+0.536\,u_2)(e_s-e_a)</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.hydro import penman_evaporation
+<span class="prompt">&gt;&gt;&gt; </span>round(penman_evaporation(15.0, 0.0, 25.0, 2.0, 3.169, 1.9, 101.3), 3)
+<span class="out">6.326</span></code></pre></div>
+        </section>
+        <section id="penman_monteith" class="fn-detail">
+          <h3><code>penman_monteith</code></h3>
+          <span class="signature">penman_monteith(net_radiation: &#x27;float&#x27;, ground_heat: &#x27;float&#x27;, temp: &#x27;float&#x27;, vpd: &#x27;float&#x27;, density: &#x27;float&#x27;, resistance_aero: &#x27;float&#x27;, resistance_surface: &#x27;float&#x27;, pressure: &#x27;float&#x27; = 101.325, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Evaporation from the general Penman-Monteith equation.</p>
+          <div class="equation"><span class="eqn-name">Penman–Monteith (Monteith, 1965)</span><span class="katex-eq" data-tex="\lambda E=\dfrac{\Delta\,A+\rho\,c_p\,D/r_a}{\Delta+\gamma\,(1+r_s/r_a)},\quad A=R_n-G">\lambda E=\dfrac{\Delta\,A+\rho\,c_p\,D/r_a}{\Delta+\gamma\,(1+r_s/r_a)},\quad A=R_n-G</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.hydro import penman_monteith
+<span class="prompt">&gt;&gt;&gt; </span>round(penman_monteith(150.0, 20.0, 25.0, 1.5, 1.2, 50.0, 70.0), 3)
+<span class="out">6.133</span></code></pre></div>
+        </section>
+        <section id="potential_evapotranspiration" class="fn-detail">
+          <h3><code>potential_evapotranspiration</code></h3>
+          <span class="signature">potential_evapotranspiration(net_radiation: &#x27;float&#x27;, ground_heat: &#x27;float&#x27;, temp: &#x27;float&#x27;, wind_2m: &#x27;float&#x27;, es: &#x27;float&#x27;, ea: &#x27;float&#x27;, pressure: &#x27;float&#x27; = 101.325, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Reference evapotranspiration from the FAO-56 Penman-Monteith equation.</p>
+          <div class="equation"><span class="eqn-name">FAO-56 (Allen et al., 1998)</span><span class="katex-eq" data-tex="ET_0=\dfrac{0.408\,\Delta(R_n-G)+\gamma\,\dfrac{900}{T+273}\,u_2(e_s-e_a)}{\Delta+\gamma\,(1+0.34\,u_2)}">ET_0=\dfrac{0.408\,\Delta(R_n-G)+\gamma\,\dfrac{900}{T+273}\,u_2(e_s-e_a)}{\Delta+\gamma\,(1+0.34\,u_2)}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.hydro import potential_evapotranspiration
+<span class="prompt">&gt;&gt;&gt; </span>round(potential_evapotranspiration(15.0, 0.0, 25.0, 2.0, 3.169, 1.9, 101.3), 3)
+<span class="out">5.539</span></code></pre></div>
+        </section>
+        <section id="equilibrium_evaporation" class="fn-detail">
+          <h3><code>equilibrium_evaporation</code></h3>
+          <span class="signature">equilibrium_evaporation(net_radiation: &#x27;float&#x27;, ground_heat: &#x27;float&#x27;, temp: &#x27;float&#x27;, pressure: &#x27;float&#x27; = 101.325, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Equilibrium evaporation from available energy.</p>
+          <div class="equation"><span class="eqn-name">Equilibrium evaporation</span><span class="katex-eq" data-tex="E_\mathrm{eq}=\dfrac{\Delta}{\Delta+\gamma}\cdot\dfrac{R_n-G}{\lambda}">E_\mathrm{eq}=\dfrac{\Delta}{\Delta+\gamma}\cdot\dfrac{R_n-G}{\lambda}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.hydro import equilibrium_evaporation
+<span class="prompt">&gt;&gt;&gt; </span>round(equilibrium_evaporation(15.0, 0.0, 25.0), 3)
+<span class="out">4.521</span></code></pre></div>
+        </section>
+        <section id="priestley_taylor" class="fn-detail">
+          <h3><code>priestley_taylor</code></h3>
+          <span class="signature">priestley_taylor(net_radiation: &#x27;float&#x27;, ground_heat: &#x27;float&#x27;, temp: &#x27;float&#x27;, alpha: &#x27;float&#x27; = 1.26, pressure: &#x27;float&#x27; = 101.325, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Priestley-Taylor evaporation.</p>
+          <div class="equation"><span class="eqn-name">Priestley &amp; Taylor (1972)</span><span class="katex-eq" data-tex="E_\mathrm{pt}=\alpha\,E_\mathrm{eq}">E_\mathrm{pt}=\alpha\,E_\mathrm{eq}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.hydro import priestley_taylor
+<span class="prompt">&gt;&gt;&gt; </span>round(priestley_taylor(15.0, 0.0, 25.0), 3)
+<span class="out">5.697</span></code></pre></div>
+        </section>
+        <section id="hargreaves" class="fn-detail">
+          <h3><code>hargreaves</code></h3>
+          <span class="signature">hargreaves(temp_mean: &#x27;float&#x27;, temp_min: &#x27;float&#x27;, temp_max: &#x27;float&#x27;, extraterrestrial: &#x27;float&#x27;, unit: &#x27;str&#x27; = &#x27;C&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Hargreaves reference evapotranspiration.</p>
+          <div class="equation"><span class="eqn-name">Hargreaves–Samani (1985)</span><span class="katex-eq" data-tex="ET_0=0.0023\,(T_\mathrm{mean}+17.8)\,\sqrt{T_\mathrm{max}-T_\mathrm{min}}\;\dfrac{R_a}{\lambda}">ET_0=0.0023\,(T_\mathrm{mean}+17.8)\,\sqrt{T_\mathrm{max}-T_\mathrm{min}}\;\dfrac{R_a}{\lambda}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.hydro import hargreaves
+<span class="prompt">&gt;&gt;&gt; </span>round(hargreaves(25.0, 18.0, 32.0, 36.0), 3)
+<span class="out">5.41</span></code></pre></div>
+        </section>
+      </section>
+      <section id="aerosols" class="module-section">
+        <h2><code>aerosols</code> &mdash; Aerosols<a class="anchor" href="#aerosols" aria-hidden="true">#</a></h2>
+        <p>Fluxes of particles and non-water trace gases: gravitational settling, resistance-model dry deposition, and surface emission.</p>
+        <section id="settling_velocity" class="fn-detail">
+          <h3><code>settling_velocity</code></h3>
+          <span class="signature">settling_velocity(diameter: &#x27;float&#x27;, particle_density: &#x27;float&#x27;, viscosity: &#x27;float&#x27; = 1.789e-05, mean_free_path: &#x27;float&#x27; = 6.63e-08) -&gt; &#x27;float&#x27;</span>
+          <p>Gravitational settling velocity of a spherical aerosol particle.</p>
+          <div class="equation"><span class="eqn-name">Stokes law with Cunningham slip</span><span class="katex-eq" data-tex="\begin{aligned}C_c&amp;=1+\dfrac{2\lambda}{d}\Big(1.257+0.4\,e^{-1.1\,d/(2\lambda)}\Big)\\ v_s&amp;=\dfrac{(\rho_p-\rho_a)\,d^2\,g\,C_c}{18\,\mu}\end{aligned}">\begin{aligned}C_c&amp;=1+\dfrac{2\lambda}{d}\Big(1.257+0.4\,e^{-1.1\,d/(2\lambda)}\Big)\\ v_s&amp;=\dfrac{(\rho_p-\rho_a)\,d^2\,g\,C_c}{18\,\mu}\end{aligned}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.aerosols import settling_velocity
+<span class="prompt">&gt;&gt;&gt; </span>round(settling_velocity(1e-6, 1000.0) * 1e6, 3)
+<span class="out">35.486</span>
+<span class="prompt">&gt;&gt;&gt; </span>round(settling_velocity(10e-6, 1000.0) * 1e3, 3)
+<span class="out">3.092</span></code></pre></div>
+        </section>
+        <section id="dry_deposition_velocity" class="fn-detail">
+          <h3><code>dry_deposition_velocity</code></h3>
+          <span class="signature">dry_deposition_velocity(settling: &#x27;float&#x27;, resistance_aero: &#x27;float&#x27;, resistance_surface: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Dry deposition velocity from the resistance-in-series model.</p>
+          <div class="equation"><span class="eqn-name">Resistance-in-series model</span><span class="katex-eq" data-tex="v_d=v_s+\dfrac{1}{r_a+r_b+r_a r_b v_s}">v_d=v_s+\dfrac{1}{r_a+r_b+r_a r_b v_s}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.aerosols import dry_deposition_velocity, settling_velocity
+<span class="prompt">&gt;&gt;&gt; </span>vs = settling_velocity(10e-6, 1000.0)
+<span class="prompt">&gt;&gt;&gt; </span>round(dry_deposition_velocity(vs, 50.0, 20.0) * 1000, 3)
+<span class="out">16.774</span></code></pre></div>
+        </section>
+        <section id="emission_flux" class="fn-detail">
+          <h3><code>emission_flux</code></h3>
+          <span class="signature">emission_flux(concentration: &#x27;float&#x27;, transfer_velocity: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Surface emission flux from a transfer velocity and concentration.</p>
+          <div class="equation"><span class="eqn-name">Emission flux</span><span class="katex-eq" data-tex="F=v_t\,C">F=v_t\,C</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.aerosols import emission_flux
+<span class="prompt">&gt;&gt;&gt; </span>emission_flux(2e-6, 0.01)
+<span class="out">2e-08</span></code></pre></div>
+        </section>
+      </section>
+      <section id="balance" class="module-section">
+        <h2><code>balance</code> &mdash; Energy balance<a class="anchor" href="#balance" aria-hidden="true">#</a></h2>
+        <p>Surface energy-budget diagnostics: closure residual, Bowen ratio, available energy, the closure ratio, ground-heat parameterization, and the EnergyBalance container.</p>
+        <section id="surface_energy_residual" class="fn-detail">
+          <h3><code>surface_energy_residual</code></h3>
+          <span class="signature">surface_energy_residual(net_radiation: &#x27;float&#x27;, sensible_heat: &#x27;float&#x27;, latent_heat: &#x27;float&#x27;, ground_heat: &#x27;float&#x27; = 0.0) -&gt; &#x27;float&#x27;</span>
+          <p>Surface energy balance closure residual.</p>
+          <div class="equation"><span class="eqn-name">Energy-balance closure</span><span class="katex-eq" data-tex="\mathrm{residual}=R_n-G-H-LE">\mathrm{residual}=R_n-G-H-LE</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.balance import surface_energy_residual
+<span class="prompt">&gt;&gt;&gt; </span>surface_energy_residual(400.0, 150.0, 200.0, 50.0)
+<span class="out">0.0</span></code></pre></div>
+        </section>
+        <section id="bowen_ratio" class="fn-detail">
+          <h3><code>bowen_ratio</code></h3>
+          <span class="signature">bowen_ratio(sensible_heat: &#x27;float&#x27;, latent_heat: &#x27;float&#x27;) -&gt; &#x27;float&#x27;</span>
+          <p>Bowen ratio of sensible to latent heat flux.</p>
+          <div class="equation"><span class="eqn-name">Bowen ratio</span><span class="katex-eq" data-tex="\beta=\dfrac{H}{LE}">\beta=\dfrac{H}{LE}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.balance import bowen_ratio
+<span class="prompt">&gt;&gt;&gt; </span>round(bowen_ratio(150.0, 200.0), 3)
+<span class="out">0.75</span></code></pre></div>
+        </section>
+        <section id="energy_balance" class="fn-detail">
+          <h3><code>energy_balance</code></h3>
+          <span class="signature">energy_balance(net_radiation: &#x27;float&#x27;, sensible_heat: &#x27;float&#x27;, latent_heat: &#x27;float&#x27;, ground_heat: &#x27;float&#x27; = 0.0) -&gt; &#x27;EnergyBalance&#x27;</span>
+          <p>Assemble an EnergyBalance container from surface flux components.</p>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.balance import bowen_ratio, energy_balance
+<span class="prompt">&gt;&gt;&gt; </span>eb = energy_balance(400.0, 150.0, 200.0, 50.0)
+<span class="prompt">&gt;&gt;&gt; </span>eb.residual
+<span class="out">0.0</span>
+<span class="prompt">&gt;&gt;&gt; </span>round(eb.bowen_ratio, 2)
+<span class="out">0.75</span></code></pre></div>
+        </section>
+        <section id="available_energy" class="fn-detail">
+          <h3><code>available_energy</code></h3>
+          <span class="signature">available_energy(net_radiation: &#x27;float&#x27;, ground_heat: &#x27;float&#x27; = 0.0) -&gt; &#x27;float&#x27;</span>
+          <p>Available energy at the surface.</p>
+          <div class="equation"><span class="eqn-name">Available energy</span><span class="katex-eq" data-tex="A=R_n-G">A=R_n-G</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.balance import available_energy
+<span class="prompt">&gt;&gt;&gt; </span>available_energy(400.0, 50.0)
+<span class="out">350.0</span></code></pre></div>
+        </section>
+        <section id="energy_balance_ratio" class="fn-detail">
+          <h3><code>energy_balance_ratio</code></h3>
+          <span class="signature">energy_balance_ratio(sensible_heat: &#x27;float&#x27;, latent_heat: &#x27;float&#x27;, net_radiation: &#x27;float&#x27;, ground_heat: &#x27;float&#x27; = 0.0) -&gt; &#x27;float&#x27;</span>
+          <p>Energy balance closure ratio.</p>
+          <div class="equation"><span class="eqn-name">Energy-balance ratio</span><span class="katex-eq" data-tex="\mathrm{EBR}=\dfrac{H+LE}{R_n-G}">\mathrm{EBR}=\dfrac{H+LE}{R_n-G}</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.balance import energy_balance_ratio
+<span class="prompt">&gt;&gt;&gt; </span>round(energy_balance_ratio(150.0, 200.0, 400.0, 50.0), 3)
+<span class="out">1.0</span></code></pre></div>
+        </section>
+        <section id="ground_heat_fraction" class="fn-detail">
+          <h3><code>ground_heat_fraction</code></h3>
+          <span class="signature">ground_heat_fraction(net_radiation: &#x27;float&#x27;, fraction: &#x27;float&#x27; = 0.1) -&gt; &#x27;float&#x27;</span>
+          <p>Estimate ground heat flux as a fraction of net radiation.</p>
+          <div class="equation"><span class="eqn-name">Ground-heat fraction</span><span class="katex-eq" data-tex="G=f\,R_n">G=f\,R_n</span></div>
+          <div class="codeblock"><pre><code><span class="prompt">&gt;&gt;&gt; </span>from atmoflux.balance import ground_heat_fraction
+<span class="prompt">&gt;&gt;&gt; </span>ground_heat_fraction(400.0)
+<span class="out">40.0</span></code></pre></div>
+        </section>
+      </section>
+      </main>
+
+      <aside class="onthispage" aria-label="On this page">
+        <div class="otp-label">On this page</div>
+        <nav id="otpNav">
+          <a href="#air_density"><code>air_density</code></a>
+          <a href="#sensible_heat_flux"><code>sensible_heat_flux</code></a>
+          <a href="#latent_heat_flux"><code>latent_heat_flux</code></a>
+          <a href="#bulk_transfer_coefficient"><code>bulk_transfer_coefficient</code></a>
+          <a href="#surface_shear_stress"><code>surface_shear_stress</code></a>
+          <a href="#aerodynamic_resistance"><code>aerodynamic_resistance</code></a>
+          <a href="#bulk_richardson_number"><code>bulk_richardson_number</code></a>
+          <a href="#obukhov_length"><code>obukhov_length</code></a>
+          <a href="#stability_parameter"><code>stability_parameter</code></a>
+          <a href="#psi_momentum"><code>psi_momentum</code></a>
+          <a href="#psi_heat"><code>psi_heat</code></a>
+          <a href="#stability_class"><code>stability_class</code></a>
+          <a href="#latent_heat_to_evaporation"><code>latent_heat_to_evaporation</code></a>
+          <a href="#penman_evaporation"><code>penman_evaporation</code></a>
+          <a href="#penman_monteith"><code>penman_monteith</code></a>
+          <a href="#potential_evapotranspiration"><code>potential_evapotranspiration</code></a>
+          <a href="#equilibrium_evaporation"><code>equilibrium_evaporation</code></a>
+          <a href="#priestley_taylor"><code>priestley_taylor</code></a>
+          <a href="#hargreaves"><code>hargreaves</code></a>
+          <a href="#settling_velocity"><code>settling_velocity</code></a>
+          <a href="#dry_deposition_velocity"><code>dry_deposition_velocity</code></a>
+          <a href="#emission_flux"><code>emission_flux</code></a>
+          <a href="#surface_energy_residual"><code>surface_energy_residual</code></a>
+          <a href="#bowen_ratio"><code>bowen_ratio</code></a>
+          <a href="#energy_balance"><code>energy_balance</code></a>
+          <a href="#available_energy"><code>available_energy</code></a>
+          <a href="#energy_balance_ratio"><code>energy_balance_ratio</code></a>
+          <a href="#ground_heat_fraction"><code>ground_heat_fraction</code></a>
+        </nav>
+      </aside>
+    </div>
+
+    <footer class="site">
+      <div>&copy; 2026 Telluris Labs</div>
+      <div>Hosted on GitHub Pages</div>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
