@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://tellurislabs.io/</loc>
+  </url>
+
+  <url>
+    <loc>https://tellurislabs.io/atmoflux.html</loc>
+  </url>
+
+  <url>
+    <loc>https://tellurislabs.io/thermadex.html</loc>
+  </url>
+
+  <url>
+    <loc>https://tellurislabs.io/atmospheric-state.html</loc>
+  </url>
+
+  <url>
+    <loc>https://tellurislabs.io/core-utilities.html</loc>
+  </url>
+
+  <url>
+    <loc>https://tellurislabs.io/radiation.html</loc>
+  </url>
+
+  <url>
+    <loc>https://tellurislabs.io/surface-fluxes.html</loc>
+  </url>
+
+</urlset>
