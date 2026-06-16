@@ -25,24 +25,24 @@
     })();
   </script>
 
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/styles.css">
 </head>
 
 <body>
   <div class="page">
     <header class="site">
-      <a href="index.html" aria-label="Telluris Labs home" style="display:flex;align-items:center;">
-        <img src="full_color.svg" alt="Telluris Labs Logo" class="logo" onerror="this.style.display='none'">
+      <a href="/" aria-label="Telluris Labs home" style="display:flex;align-items:center;">
+        <img src="/full_color.svg" alt="Telluris Labs Logo" class="logo" onerror="this.style.display='none'">
       </a>
       <div class="header-text">
-        <h1><a href="index.html">Telluris Labs</a></h1>
+        <h1><a href="/">Telluris Labs</a></h1>
         <p>Geospatial Software and Data Solutions</p>
       </div>
     </header>
     <nav class="subnav" aria-label="Site navigation and tools">
       <div class="topnav-links">
-        <a href="index.html">Home</a>
-        <a href="atmoflux.html">Atmoflux</a>
+        <a href="/">Home</a>
+        <a href="/atmoflux/">Atmoflux</a>
         <button class="rail-toggle-nav" id="railToggle" type="button"
                 aria-expanded="false" aria-controls="railBody" aria-label="Toggle sections menu">
           <span class="caret" aria-hidden="true">▾</span>
@@ -75,37 +75,37 @@
         <nav class="toc-nav" id="sidebarNav" aria-label="atmoflux sections">
           <div class="nav-group">
             <span class="group-label">Getting started</span>
-            <a href="atmoflux.html#overview">Overview</a>
-            <a href="atmoflux.html#conventions">Conventions &amp; units</a>
-            <a href="atmoflux.html#citation">Citation</a>
-            <a href="atmoflux.html#installation">Installation</a>
-            <a href="atmoflux.html#quickstart">Quick start</a>
+            <a href="/atmoflux/#overview">Overview</a>
+            <a href="/atmoflux/#conventions">Conventions &amp; units</a>
+            <a href="/atmoflux/#citation">Citation</a>
+            <a href="/atmoflux/#installation">Installation</a>
+            <a href="/atmoflux/#quickstart">Quick start</a>
           </div>
           <div class="nav-group">
             <span class="group-label">Atmospheric state</span>
-            <a href="atmospheric-state.html#temperature">Temperature</a>
-            <a href="atmospheric-state.html#humidity">Humidity &amp; moisture</a>
-            <a href="atmospheric-state.html#wind">Wind</a>
-            <a href="atmospheric-state.html#atmosphere">Standard atmosphere</a>
+            <a href="/atmoflux/atmospheric-state/#temperature">Temperature</a>
+            <a href="/atmoflux/atmospheric-state/#humidity">Humidity &amp; moisture</a>
+            <a href="/atmoflux/atmospheric-state/#wind">Wind</a>
+            <a href="/atmoflux/atmospheric-state/#atmosphere">Standard atmosphere</a>
           </div>
           <div class="nav-group">
             <span class="group-label">Radiation</span>
-            <a href="radiation.html#solar">Solar geometry</a>
-            <a href="radiation.html#radiative">Radiative fluxes</a>
+            <a href="/atmoflux/radiation/#solar">Solar geometry</a>
+            <a href="/atmoflux/radiation/#radiative">Radiative fluxes</a>
           </div>
           <div class="nav-group">
             <span class="group-label">Surface fluxes &amp; energy balance</span>
-            <a href="surface-fluxes.html#turbulent">Turbulent fluxes</a>
-            <a href="surface-fluxes.html#stability">Surface-layer stability</a>
-            <a href="surface-fluxes.html#hydro">Evaporation &amp; hydrology</a>
-            <a href="surface-fluxes.html#aerosols">Aerosols</a>
-            <a href="surface-fluxes.html#balance">Energy balance</a>
+            <a href="/atmoflux/surface-fluxes/#turbulent">Turbulent fluxes</a>
+            <a href="/atmoflux/surface-fluxes/#stability">Surface-layer stability</a>
+            <a href="/atmoflux/surface-fluxes/#hydro">Evaporation &amp; hydrology</a>
+            <a href="/atmoflux/surface-fluxes/#aerosols">Aerosols</a>
+            <a href="/atmoflux/surface-fluxes/#balance">Energy balance</a>
           </div>
           <div class="nav-group">
             <span class="group-label">Core &amp; utilities</span>
-            <a href="core-utilities.html#core">Core data structures</a>
-            <a href="core-utilities.html#constants">Constants</a>
-            <a href="core-utilities.html#exceptions">Exceptions</a>
+            <a href="/atmoflux/core-utilities/#core">Core data structures</a>
+            <a href="/atmoflux/core-utilities/#constants">Constants</a>
+            <a href="/atmoflux/core-utilities/#exceptions">Exceptions</a>
           </div>
         </nav>
           <div class="filter-empty" id="filterEmpty">No matching sections.</div>
@@ -149,33 +149,33 @@
         <h2><code>constants</code> &mdash; Constants<a class="anchor" href="#constants" aria-hidden="true">#</a></h2>
         <p>The single source of truth for physical and derived constants used across atmoflux. All pressures are in kPa.</p>
         <table class="fn-table">
-          <thead><tr><th>Constant</th><th>Value</th><th>Units</th></tr></thead>
+          <thead><tr><th>Constant</th><th>Value</th><th>Meaning</th></tr></thead>
           <tbody>
-            <tr><td><code>CP_AIR</code></td><td><code>1005.0</code></td><td>J/(kg·K)</td></tr>
-            <tr><td><code>LV</code></td><td><code>2450000.0</code></td><td>J/kg</td></tr>
-            <tr><td><code>PC</code></td><td><code>0.066</code></td><td>kPa/K</td></tr>
-            <tr><td><code>R_AIR</code></td><td><code>287.05287</code></td><td>J/(kg·K)</td></tr>
-            <tr><td><code>R_VAPOR</code></td><td><code>461.52332</code></td><td>J/(kg·K)</td></tr>
-            <tr><td><code>RMW</code></td><td><code>0.622</code></td><td>Dimensionless</td></tr>
-            <tr><td><code>SVP_A</code></td><td><code>0.61078</code></td><td>kPa</td></tr>
-            <tr><td><code>SVP_B</code></td><td><code>17.27</code></td><td>Dimensionless</td></tr>
-            <tr><td><code>SVP_C</code></td><td><code>237.3</code></td><td>&deg;C</td></tr>
-            <tr><td><code>STEFAN_BOLTZMANN</code></td><td><code>5.670374419e-08</code></td><td>W/(m<sup>2</sup>·K<sup>4</sup>)</td></tr>
-            <tr><td><code>SOLAR_CONSTANT</code></td><td><code>1361.6</code></td><td>W/m²</td></tr>
-            <tr><td><code>KARMAN</code></td><td><code>0.4</code></td><td>Dimensionless</td></tr>
-            <tr><td><code>G</code></td><td><code>9.80665</code></td><td>m/s²</td></tr>
-            <tr><td><code>P0</code></td><td><code>101.325</code></td><td>kPa</td></tr>
-            <tr><td><code>RHO_WATER</code></td><td><code>1000.0</code></td><td>kg/m³</td></tr>
-            <tr><td><code>RHO_AIR_STD</code></td><td><code>1.225</code></td><td>kg/m³</td></tr>
-            <tr><td><code>MU_AIR</code></td><td><code>1.789e-05</code></td><td>Pa·s</td></tr>
-            <tr><td><code>MFP_AIR</code></td><td><code>6.63e-08</code></td><td>m</td></tr>
-            <tr><td><code>SOLAR_DECLINATION_MAX</code></td><td><code>23.45</code></td><td>&deg;</td></tr>
-            <tr><td><code>ANGSTROM_A</code></td><td><code>0.25</code></td><td>Dimensionless</td></tr>
-            <tr><td><code>ANGSTROM_B</code></td><td><code>0.5</code></td><td>Dimensionless</td></tr>
-            <tr><td><code>PRIESTLEY_TAYLOR_ALPHA</code></td><td><code>1.26</code></td><td>Dimensionless</td></tr>
-            <tr><td><code>DRY_ADIABATIC_LAPSE_RATE</code></td><td><code>0.009757860696517412</code></td><td>K/m</td></tr>
-            <tr><td><code>T0_STANDARD</code></td><td><code>288.15</code></td><td>K</td></tr>
-            <tr><td><code>LAPSE_RATE_STANDARD</code></td><td><code>0.0065</code></td><td>K/m</td></tr>
+            <tr><td><code>CP_AIR</code></td><td><code>1005.0</code></td><td>Units: J/(kg·K) (Standard in atmospheric science and meteorology calculations)</td></tr>
+            <tr><td><code>LV</code></td><td><code>2450000.0</code></td><td>Units: J/kg</td></tr>
+            <tr><td><code>PC</code></td><td><code>0.066</code></td><td>Units: kPa/K</td></tr>
+            <tr><td><code>R_AIR</code></td><td><code>287.05287</code></td><td>Units: J/(kg·K)</td></tr>
+            <tr><td><code>R_VAPOR</code></td><td><code>461.52332</code></td><td>Units: J/(kg·K)</td></tr>
+            <tr><td><code>RMW</code></td><td><code>0.622</code></td><td>Units: Dimensionless factor used in humidity calculations</td></tr>
+            <tr><td><code>SVP_A</code></td><td><code>0.61078</code></td><td>Units: A = kPa, B= dimensionless, C = degrees Celsius</td></tr>
+            <tr><td><code>SVP_B</code></td><td><code>17.27</code></td><td></td></tr>
+            <tr><td><code>SVP_C</code></td><td><code>237.3</code></td><td></td></tr>
+            <tr><td><code>STEFAN_BOLTZMANN</code></td><td><code>5.670374419e-08</code></td><td>Units: W/(m²·K⁴)</td></tr>
+            <tr><td><code>SOLAR_CONSTANT</code></td><td><code>1361.6</code></td><td>Units: W/m²</td></tr>
+            <tr><td><code>KARMAN</code></td><td><code>0.4</code></td><td>Units: dimensionless</td></tr>
+            <tr><td><code>G</code></td><td><code>9.80665</code></td><td>Units: m/s²</td></tr>
+            <tr><td><code>P0</code></td><td><code>101.325</code></td><td>Units: kPa</td></tr>
+            <tr><td><code>RHO_WATER</code></td><td><code>1000.0</code></td><td>Units: kg/m³</td></tr>
+            <tr><td><code>RHO_AIR_STD</code></td><td><code>1.225</code></td><td>Units: kg/m³</td></tr>
+            <tr><td><code>MU_AIR</code></td><td><code>1.789e-05</code></td><td>Units: Pa·s</td></tr>
+            <tr><td><code>MFP_AIR</code></td><td><code>6.63e-08</code></td><td>Units: m</td></tr>
+            <tr><td><code>SOLAR_DECLINATION_MAX</code></td><td><code>23.45</code></td><td>Units: degrees</td></tr>
+            <tr><td><code>ANGSTROM_A</code></td><td><code>0.25</code></td><td>Units: dimensionless</td></tr>
+            <tr><td><code>ANGSTROM_B</code></td><td><code>0.5</code></td><td></td></tr>
+            <tr><td><code>PRIESTLEY_TAYLOR_ALPHA</code></td><td><code>1.26</code></td><td>Units: dimensionless</td></tr>
+            <tr><td><code>DRY_ADIABATIC_LAPSE_RATE</code></td><td><code>0.009757860696517412</code></td><td>Units: K/m</td></tr>
+            <tr><td><code>T0_STANDARD</code></td><td><code>288.15</code></td><td>Units: K</td></tr>
+            <tr><td><code>LAPSE_RATE_STANDARD</code></td><td><code>0.0065</code></td><td>Units: K/m</td></tr>
           </tbody>
         </table>
       </section>
@@ -237,7 +237,7 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
-  <script src="app.js"></script>
+  <script src="/app.js"></script>
 </body>
 
 </html>
