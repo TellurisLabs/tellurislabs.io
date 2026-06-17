@@ -26,6 +26,7 @@ html[data-theme="light"] {
   --surface-2: #eee;
   --surface-3: #F8F9FA;
   --text: #222222;
+  --text-2: #8fbfd3; 
   --muted: #5a5f5c;
   --border: #e3e6e4;
   --accent: #11925c;
@@ -44,6 +45,7 @@ html[data-theme="dark"] {
   --surface-2: #1b2420;
   --surface-3: #1b2420;
   --text: #e7eae8;
+  --text-2: #b8deec;
   --muted: #98a39d;
   --border: #27322c;
   --accent: #34c585;
@@ -235,13 +237,13 @@ nav.toc-nav .nav-group > .group-label {
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--accent);
   padding: 0.85rem 0.75rem 0.3rem;
 }
 nav.toc-nav a {
   display: block;
   font-size: 0.9rem;
-  color: var(--text);
+  color: var(--text-2);
   padding: 0.32rem 0.75rem;
   border-left: 2px solid transparent;
   border-radius: 0 var(--radius) var(--radius) 0;
