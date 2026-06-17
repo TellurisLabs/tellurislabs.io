@@ -196,23 +196,6 @@ html[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
 }
 
 /* ---------- Left sidebar ---------- */
-nav.toc-nav .nav-group {
-  margin-bottom: 0.4rem;
-}
-
-/* Section headers */
-nav.toc-nav .nav-group > a.group-label {
-  display: block;
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent);
-  padding: 0.85rem 0.75rem 0.3rem;
-}
-
-/* TOC subsection links */
 aside.sidebar {
   position: sticky;
   top: var(--subnav-h);
@@ -221,7 +204,9 @@ aside.sidebar {
   padding: 1.5rem 0.5rem 2rem 0;
   border-right: 1px solid var(--border);
 }
+
 .filter-wrap { padding: 0 0.5rem 1rem 0.25rem; }
+
 .filter-input {
   width: 100%;
   font-family: var(--font-body);
@@ -233,12 +218,15 @@ aside.sidebar {
   padding: 0.5rem 0.7rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+
 .filter-input::placeholder { color: var(--muted); }
+
 .filter-input:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
+
 .filter-empty {
   display: none;
   padding: 0.5rem 0.75rem;
@@ -246,6 +234,26 @@ aside.sidebar {
   color: var(--muted);
 }
 
+/* ---------- TOC ---------- */
+
+nav.toc-nav .nav-group {
+  margin-bottom: 0.4rem;
+}
+
+/* Group headers */
+nav.toc-nav .nav-group > a.group-label {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 0.85rem 0.75rem 0.3rem;
+  text-decoration: none;
+}
+
+/* Subsection links */
 nav.toc-nav .nav-group > a:not(.group-label) {
   display: block;
   font-size: 0.9rem;
@@ -254,36 +262,25 @@ nav.toc-nav .nav-group > a:not(.group-label) {
   padding: 0.32rem 0.75rem;
   border-left: 2px solid transparent;
   border-radius: 0 var(--radius) var(--radius) 0;
+  text-decoration: none;
   transition: background 0.15s ease,
               color 0.15s ease,
               border-color 0.15s ease;
 }
 
-/* Hover state for section headers */
-nav.toc-nav .nav-group > a.group-label:hover {
-  background: var(--surface-2);
-  text-decoration: none;
-}
-
-/* Hover state for subsection */
+/* Hover action */
+nav.toc-nav .nav-group > a.group-label:hover,
 nav.toc-nav .nav-group > a:not(.group-label):hover {
   background: var(--surface-2);
   text-decoration: none;
 }
 
-/* Active subsection */
+/* Active subsection indicator */
 nav.toc-nav .nav-group > a:not(.group-label).active {
   color: var(--text-2);
   font-weight: 500;
   border-left-color: var(--accent);
   background: transparent;
-}
-
-/* Active section header */
-nav.toc-nav .nav-group > a.group-label.active {
-  color: var(--accent);
-  background: transparent;
-  border-left-color: transparent;
 }
 
 nav.toc-nav a.hidden {
