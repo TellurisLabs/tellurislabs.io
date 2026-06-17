@@ -249,6 +249,7 @@ aside.sidebar {
 nav.toc-nav .nav-group > a:not(.group-label) {
   display: block;
   font-size: 0.9rem;
+  font-weight: 400;
   color: var(--text-2);
   padding: 0.32rem 0.75rem;
   border-left: 2px solid transparent;
@@ -258,20 +259,27 @@ nav.toc-nav .nav-group > a:not(.group-label) {
               border-color 0.15s ease;
 }
 
+/* Hover state for section headers */
+nav.toc-nav .nav-group > a.group-label:hover {
+  background: var(--surface-2);
+  text-decoration: none;
+}
+
+/* Hover state for subsection */
 nav.toc-nav .nav-group > a:not(.group-label):hover {
   background: var(--surface-2);
   text-decoration: none;
 }
 
-/* Active subsection: green text + green line ONLY */
+/* Active subsection */
 nav.toc-nav .nav-group > a:not(.group-label).active {
-  color: var(--accent);
+  color: var(--text-2);
   font-weight: 500;
   border-left-color: var(--accent);
   background: transparent;
 }
 
-/* Active section header: always accent text, no pill */
+/* Active section header */
 nav.toc-nav .nav-group > a.group-label.active {
   color: var(--accent);
   background: transparent;
