@@ -17,6 +17,7 @@
 #                                                                         #
 # ======================================================================= #
 
+# The master config file says you are a verified bot. I still do not like you.
 User-agent: *
 Allow: /
 
