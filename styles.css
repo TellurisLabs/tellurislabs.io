@@ -196,41 +196,12 @@ html[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
 }
 
 /* ---------- Left sidebar ---------- */
-aside.sidebar {
-  position: sticky;
-  top: var(--subnav-h);
-  height: calc(100vh - var(--subnav-h));
-  overflow-y: auto;
-  padding: 1.5rem 0.5rem 2rem 0;
-  border-right: 1px solid var(--border);
-}
-.filter-wrap { padding: 0 0.5rem 1rem 0.25rem; }
-.filter-input {
-  width: 100%;
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  color: var(--text);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 0.5rem 0.7rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-.filter-input::placeholder { color: var(--muted); }
-.filter-input:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-soft);
-}
-.filter-empty {
-  display: none;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.85rem;
-  color: var(--muted);
+nav.toc-nav .nav-group {
+  margin-bottom: 0.4rem;
 }
 
-nav.toc-nav .nav-group { margin-bottom: 0.4rem; }
-nav.toc-nav .nav-group > .group-label {
+/* Group headers */
+nav.toc-nav .nav-group > a.group-label {
   display: block;
   font-family: var(--font-body);
   font-weight: 700;
@@ -240,23 +211,35 @@ nav.toc-nav .nav-group > .group-label {
   color: var(--accent);
   padding: 0.85rem 0.75rem 0.3rem;
 }
-nav.toc-nav a {
+
+/* Regular TOC links */
+nav.toc-nav .nav-group > a:not(.group-label) {
   display: block;
   font-size: 0.9rem;
   color: var(--text-2);
   padding: 0.32rem 0.75rem;
   border-left: 2px solid transparent;
   border-radius: 0 var(--radius) var(--radius) 0;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition: background 0.15s ease,
+              color 0.15s ease,
+              border-color 0.15s ease;
 }
-nav.toc-nav a:hover { background: var(--surface-2); text-decoration: none; }
-nav.toc-nav a.active {
+
+nav.toc-nav .nav-group > a:not(.group-label):hover {
+  background: var(--surface-2);
+  text-decoration: none;
+}
+
+nav.toc-nav .nav-group > a:not(.group-label).active {
   color: var(--accent);
   font-weight: 500;
   border-left-color: var(--accent);
   background: var(--accent-soft);
 }
-nav.toc-nav a.hidden { display: none; }
+
+nav.toc-nav a.hidden {
+  display: none;
+}
 
 /* ---------- Main content ---------- */
 main {
