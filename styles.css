@@ -200,7 +200,7 @@ nav.toc-nav .nav-group {
   margin-bottom: 0.4rem;
 }
 
-/* Group headers */
+/* Section headers */
 nav.toc-nav .nav-group > a.group-label {
   display: block;
   font-family: var(--font-body);
@@ -212,7 +212,7 @@ nav.toc-nav .nav-group > a.group-label {
   padding: 0.85rem 0.75rem 0.3rem;
 }
 
-/* Regular TOC links */
+/* TOC subsection links */
 nav.toc-nav .nav-group > a:not(.group-label) {
   display: block;
   font-size: 0.9rem;
@@ -230,11 +230,19 @@ nav.toc-nav .nav-group > a:not(.group-label):hover {
   text-decoration: none;
 }
 
+/* Active subsection: green text + green line ONLY */
 nav.toc-nav .nav-group > a:not(.group-label).active {
   color: var(--accent);
   font-weight: 500;
   border-left-color: var(--accent);
-  background: var(--accent-soft);
+  background: transparent;
+}
+
+/* Active section header: always accent text, no pill */
+nav.toc-nav .nav-group > a.group-label.active {
+  color: var(--accent);
+  background: transparent;
+  border-left-color: transparent;
 }
 
 nav.toc-nav a.hidden {
