@@ -21,7 +21,7 @@
 User-agent: *
 Allow: /
 
-# I am mapping out the entire server for you. 
+# I am mapping out the entire site for you. 
 # You're welcome.
 
 Sitemap: https://tellurislabs.io/sitemap.xml
