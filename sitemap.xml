@@ -3,30 +3,37 @@
 
   <url>
     <loc>https://tellurislabs.io/</loc>
+    <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://tellurislabs.io/atmoflux.html</loc>
+    <loc>https://tellurislabs.io/atmoflux/</loc>
+    <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://tellurislabs.io/thermadex.html</loc>
+    <loc>https://tellurislabs.io/atmoflux/atmospheric-state/</loc>
+    <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://tellurislabs.io/atmospheric-state.html</loc>
+    <loc>https://tellurislabs.io/atmoflux/radiation/</loc>
+    <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://tellurislabs.io/core-utilities.html</loc>
+    <loc>https://tellurislabs.io/atmoflux/surface-fluxes/</loc>
+    <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://tellurislabs.io/radiation.html</loc>
+    <loc>https://tellurislabs.io/atmoflux/core-utilities/</loc>
+    <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://tellurislabs.io/surface-fluxes.html</loc>
+    <loc>https://tellurislabs.io/thermadex/</loc>
+    <priority>0.6</priority>
   </url>
 
 </urlset>
